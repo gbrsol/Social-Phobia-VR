@@ -1,0 +1,4 @@
+1 - Gerar as situações a partir de um JSON
+2 - Alterar o JSON do anjo dividindo entre positivo, negativo e pergunta
+3 - Realizar interações dos avatares
+4 - Criar saída imersiva

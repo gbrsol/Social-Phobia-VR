@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <title>Home</title>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    <script src="https://aframe.io/releases/1.0.3/aframe.min.js"></script>
+    <script src="https://unpkg.com/aframe-environment-component@1.1.0/dist/aframe-environment-component.min.js"></script>
+    <script src="https://unpkg.com/aframe-event-set-component@4.2.1/dist/aframe-event-set-component.min.js"></script>
+    <script src="https://rawgit.com/donmccurdy/aframe-extras/master/dist/aframe-extras.loaders.min.js"></script>
+    <script src="components.js"></script>
+    <script src="scripts.js"></script>
+    <script src="https://rawgit.com/mayognaise/aframe-gif-shader/master/dist/aframe-gif-shader.min.js"></script>
+    <script src="https://rawgit.com/mayognaise/aframe-gif-component/master/dist/aframe-gif-component.min.js"></script>
+    <!-- LINK ÚTIL PARA DEPOIS 
+    https://rishavjayswal.github.io/augmented-reality/
+    -->
+  </head>
+  <body>
+    <div id="angel-text" class="container p-3 mb-2 bg-dark text-white">
+      Bom dia, hoje realizaremos uma consulta
+    </div>
+    <div class="enter-vr-button">
+      <button id="btn" class="a-enter-vr-button"></button>
+    </div>
+    <a-scene>
+
+        <a-assets>
+          <a-asset-item id="cabin" src="\assets\models\scenes\cabin\cabin.obj"></a-asset-item>
+          <a-asset-item id="cabin-mtl" src="\assets\models\scenes\cabin\cabin.mtl"></a-asset-item>
+          <a-asset-item id="tunnel" src="\assets\models\scenes\arc_tunnel\scene.gltf"></a-asset-item>
+          <a-image id="portal-tex" src="\assets\scenes\textures\village.jpg"></a-image>
+          <audio id="ringtone" src="\assets\audio\knock_door.mp3" preload="auto" crossorigin="anonymous"></audio>
+          <a-asset-item id="footstep" src="\assets\scenes\textures\footsteps.png"></a-asset-item>
+          <a-asset-item id="staircase" src="assets/scenes/models/staircase/StairCase_170.gltf"></a-asset-item>
+        </a-assets>
+  
+        <a-entity id="player">
+              <a-camera  user-height="1.6">
+                <a-cursor
+                  animation__click="property: scale; startEvents: click; easing: easeInCubic; dur: 150; from: 0.1 0.1 0.1; to: 1 1 1"
+                  animation__fusing="property: scale; startEvents: fusing; easing: easeInCubic; dur: 1500; from: 1 1 1; to: 0.1 0.1 0.1"
+                  animation__mouseleave="property: scale; startEvents: mouseleave; easing: easeInCubic; dur: 500; to: 1 1 1"
+                  fuse="true"
+                  material="color: blue; shader: flat"
+                  position="0 0 -1"
+                  geometry="primitive: ring"
+                  raycaster="objects: .clickable"
+                  >
+                </a-cursor>
+                <a-entity id="angel"></a-entity>
+              </a-camera>
+        </a-entity>
+  
+        <a-entity id="relax"></a-entity>
+        
+        <a-entity id="transition" position="3 0 0"></a-entity>
+
+        <a-entity id="clinical"
+                  position="0 0.1 -4">
+                        <a-entity id="user-anchor" position="0 1.5 0">
+                          
+                        </a-entity>
+                        <a-entity id="character" character></a-entity>
+        </a-entity>
+        <a-sky></a-sky>
+        <a-plane  position="0 0 0" shadow="receive:true" material="color:#00FF00" repeat="50 50" rotation="-90 0 0" scale="50 50"></a-plane>
+      </a-scene>
+  </body>
+</html>

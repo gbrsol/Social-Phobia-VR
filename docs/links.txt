@@ -1,0 +1,10 @@
+https://renderpeople.com/free-3d-people/
+https://github.com/thedart76/aframe-blink-teleportation
+https://github.com/donmccurdy/aframe-extras/blob/master/src/loaders/README.md
+https://github.com/the-expanse/aframe-material-collection
+https://blog.mozvr.com/input-mapping/
+https://free3d.com/
+
+https://aframe.io/docs/1.0.0/guides/building-a-360-image-gallery.html
+https://www.donmccurdy.com/2017/11/06/creating-animated-gltf-characters-with-mixamo-and-blender/
+https://aframe.io/docs/1.0.0/components/animation.html#api3_animationcomplete
