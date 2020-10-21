@@ -18,16 +18,16 @@ AFRAME.registerComponent('animated-avatar',{
     var el = this.el;
     var data = this.data;
     el.addEventListener('idle',function (){
-      el.setAttribute('animation-mixer','clip',getAnim("Idle"))
+      el.setAttribute('animation-mixer','clip','idle')
     });
     el.addEventListener('walk',function (){
-      el.setAttribute('animation-mixer','clip',getAnim("Walk"))
+      el.setAttribute('animation-mixer','clip','walk')
     });
     el.addEventListener('sit',function (){
-      el.setAttribute('animation-mixer','clip',getAnim("Sit"))
+      el.setAttribute('animation-mixer','clip','sit')
     });
     el.addEventListener('talk',function (){
-      el.setAttribute('animation-mixer','clip',getAnim("Talk"))
+      el.setAttribute('animation-mixer','clip','talk')
     });
     console.log(this.el.toString() + ': Avatar component registered successfully!');
   }
