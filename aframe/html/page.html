@@ -10,10 +10,11 @@
     <script src="https://unpkg.com/aframe-environment-component@1.1.0/dist/aframe-environment-component.min.js"></script>
     <script src="https://unpkg.com/aframe-event-set-component@4.2.1/dist/aframe-event-set-component.min.js"></script>
     <script src="https://rawgit.com/donmccurdy/aframe-extras/master/dist/aframe-extras.loaders.min.js"></script>
-    <script src="components.js"></script>
-    <script src="scripts.js"></script>
     <script src="https://rawgit.com/mayognaise/aframe-gif-shader/master/dist/aframe-gif-shader.min.js"></script>
     <script src="https://rawgit.com/mayognaise/aframe-gif-component/master/dist/aframe-gif-component.min.js"></script>
+    
+    <script src="../js/components.js"></script>
+    <script src="../js/scripts.js"></script>
     <!-- LINK ÚTIL PARA DEPOIS 
     https://rishavjayswal.github.io/augmented-reality/
     -->
@@ -28,14 +29,18 @@
     <a-scene>
 
         <a-assets>
-          <a-image id="portal-tex" src="\assets\scenes\textures\village.jpg"></a-image>
           <audio id="ringtone" src="\assets\audio\knock_door.mp3" preload="auto" crossorigin="anonymous"></audio>
+
+          <a-image id="portal-tex" src="\assets\scenes\textures\village.jpg"></a-image>
           <a-image id="footstep" src="\assets\scenes\textures\footsteps.png"></a-image>
 
           <a-asset-item id="cabin" src="\assets\models\scenes\cabin\cabin.obj"></a-asset-item>
           <a-asset-item id="cabin-mtl" src="\assets\models\scenes\cabin\cabin.mtl"></a-asset-item>
           <a-asset-item id="tunnel" src="\assets\models\scenes\arc_tunnel\scene.gltf"></a-asset-item>
-          <a-asset-item id="staircase" src="assets/scenes/models/staircase/StairCase_170.gltf"></a-asset-item>
+          <a-asset-item id="staircase" src="assets/models/scenes/staircase/StairCase_170.gltf"></a-asset-item>
+          <a-asset-item id="room" src="assets/models/scenes/apartment/Bedroom/bedroom.obj"></a-asset-item>
+          <a-asset-item id="room-mtl" src="assets/models/scenes/apartment/Bedroom/bedroom.mtl"></a-asset-item>
+          <a-asset-item id="house" src="assets/models/scenes/house_full/house.gltf"></a-asset-item>
         </a-assets>
   
         <a-entity id="player">
