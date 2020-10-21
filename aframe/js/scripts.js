@@ -33,6 +33,7 @@ function playCycleAngelAudio()
     index = 0;
   angel.setAttribute('sound','src',audios_to_play[index]);
 }
+
 function loadSituation(inter)
 {
   var relax = document.querySelector('#relax');
