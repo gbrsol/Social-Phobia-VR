@@ -37,7 +37,7 @@ var angel_audio = {
 
   ]
 };
-var intervention = {
+const intervention = {
   relax: "baloon",
   transition: "staircase",
   clinical: {
