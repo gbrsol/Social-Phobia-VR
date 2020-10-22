@@ -163,14 +163,6 @@ function createAvatar(id)
   ent.setAttribute('avatar','');
   scene.appendChild(ent);
 }
-var intervention = {
-  relax: "baloon",
-  transition: "tunnel",
-  clinical: {
-    scene: "house", 
-    situation: "relative"
-  }
-};
 function loadSituationFromJSON(inter)
 {
   loadRelax(inter["relax"]);
@@ -252,7 +244,7 @@ function loadClinical(clin)
       el.setAttribute('model',{ext:'obj',scene:'#cabin',material:'#cabin-mtl',scale:'1 1 1'});
       break;
     case 'house':
-      el.setAttribute('model',{ext:'obj',scene:'#cabin',material:'#cabin-mtl',scale:'1 1 1'});
+      el.setAttribute('model',{scene:'#house',scale:'1 1 1'});
       break;
   }
 }

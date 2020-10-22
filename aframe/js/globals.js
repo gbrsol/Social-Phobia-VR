@@ -37,6 +37,14 @@ var angel_audio = {
 
   ]
 };
+var intervention = {
+  relax: "baloon",
+  transition: "staircase",
+  clinical: {
+    scene: "house", 
+    situation: "relative"
+  }
+};
 var transitioned = false;
 var opened_door = false;
 var finished = false;
