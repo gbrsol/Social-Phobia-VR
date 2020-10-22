@@ -1,5 +1,5 @@
 var List = require(["collections/list"]);
-var file = require("../intervention/intervention.json");
+//var file = require(["../intervention/intervention.json"]);
 var angel_audio = {
   "greeting": [ 
     {
@@ -38,14 +38,24 @@ var angel_audio = {
 
   ]
 };
-var intervention = loadFromFile();
 var transitioned = false;
 var opened_door = false;
 var finished = false;
 var audios_to_play = new List();
-
-function loadFromFile()
+var intervention = {
+  "relax": "baloon",
+  "transition": "staircase",
+  "clinical": {
+    "scene": "house", 
+    "situation": "relative"
+  }
+}
+function loadFromFile(file)
 {
-  console.log(intervention, file, "file")
-  return file;
+  var chooser = document.querySelector('#inputfile')
+  var objectURL = window.URL.createObjectURL("../intervention/intervention.json");
+  var reader = new FileReader();
+  var text = reader.readAsText(objectURL);
+  //var json = $.getJSON("../intervention/intervention.json").done(function(json){console.log(json);json = json.replace(/[\u0000-\u0019]+/g,"");intervention = json});
+  return JSON.parse(text.replace(/[\u0000-\u0019]+/g,""));
 }
