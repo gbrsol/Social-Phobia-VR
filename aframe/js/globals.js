@@ -1,4 +1,5 @@
-var List = require("collections/list");
+var List = require(["collections/list"]);
+var file = require("../intervention/intervention.json");
 var angel_audio = {
   "greeting": [ 
     {
@@ -37,15 +38,14 @@ var angel_audio = {
 
   ]
 };
-const intervention = {
-  relax: "baloon",
-  transition: "staircase",
-  clinical: {
-    scene: "house", 
-    situation: "relative"
-  }
-};
+var intervention = loadFromFile();
 var transitioned = false;
 var opened_door = false;
 var finished = false;
 var audios_to_play = new List();
+
+function loadFromFile()
+{
+  console.log(intervention, file, "file")
+  return file;
+}
