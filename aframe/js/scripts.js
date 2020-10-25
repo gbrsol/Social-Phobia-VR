@@ -309,6 +309,7 @@ function createDoor(pos)
 {
   var scene = document.querySelector('a-scene');
   var door = document.createElement('a-entity');
+  door.setAttribute('id','house-door');
   door.setAttribute('door',"");
   door.setAttribute('position',pos)
   scene.appendChild(door);
@@ -330,7 +331,7 @@ function loadClinical(clin)
       //anchor.setAttribute('position',"1505 1.6 245");
       anchor.setAttribute('position',"7.60976 -39.9 -0.93902");//<a-entity id="user-anchor" position="7.60976 -39.18216 -0.93902"></a-entity>
       //<a-entity door="" position="-3.39121 -40 0.4202" scale="0.01 0.01 0.01" animation__click="property: rotation; startEvents: click; dur: 2000; to: 0 80 0" event-set__click="opened_door = !opened_door;"><a-entity position="0 0 -0.65"><a-entity obj-model="obj: ../assets/models/scenes/sweet_3d/porta/porta_fechada.obj; mtl: ../assets/models/scenes/sweet_3d/porta/porta_fechada.mtl"></a-entity></a-entity></a-entity>
-      createDoor('-3.4 -40 0.4 ');
+      createDoor({x:3, y: -40, z: 5});
       break;
   }
 }
