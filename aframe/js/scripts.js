@@ -212,6 +212,7 @@ function loadRelax(relax)
 function createFootsteps(positions)
 {
   var id = 1;
+  var scene = document.querySelector('a-scene');
   /* exemplo casa
         <a-plane id="foot-1" src="#footstep" goto rotation="-90 0 0" position="6.85164 -39.9465 -0.76414" material="" geometry="" class="clickable"></a-plane>
         <a-plane id="foot-2" src="#footstep" goto rotation="-90 0 0" position="2.6907 -39.9465 -0.76414" material="" geometry="" class="clickable"></a-plane>
@@ -223,10 +224,12 @@ function createFootsteps(positions)
   */ 
   positions.forEach(function(){
     var el = document.createElement('a-plane');
+    el.setAttribute('id','footsteps-'+id);
     el.setAttribute('rotation','-90 0 0');
     el.setAttribute('src','#footstep');
     el.setAttribute('position',this[i].toString());
     el.classList.add('clickable');
+    scene.appendChild(el);
   });
 }
 
