@@ -178,16 +178,22 @@ AFRAME.registerComponent('door',{
                 </a-entity>
               </a-entity>
     */
-   var el = this.el;
+   var parent = this.el;
+   var el = document.createElement('a-entity')//this.el;
    var data = this.data;
    el.classList.add('clickable');
    el.setAttribute('model',{ext:'obj',scene:'#door',material:'#door-mtl'});
+   //el.setAttribute('scale','0.01 0.01 0.01')
+   el.setAttribute('position','56 5 0');
    el.addEventListener('click',function(){
+     console.log('the door was clicked');
     if(opened_door)
-      el.setAttribute('model',{ext:'obj',scene:'#door',material:'#door-mtl'});
-    else el.setAttribute('model',{ext:'obj',scene:'#door-open',material:'#door-open-mtl'});
+      parent.setAttribute('animation__click',{property:"rotation",startEvents:"click",dur:"2000",to:"0 0 0"});//  el.setAttribute('model',{ext:'obj',scene:'#door',material:'#door-mtl'});
+    else 
+      parent.setAttribute('animation__click',{property:"rotation",startEvents:"click",dur:"2000",to:"0 -80 0"});//  el.setAttribute('model',{ext:'obj',scene:'#door-open',material:'#door-open-mtl'});
     opened_door = !opened_door;
    });
+   parent.appendChild(el);
    /*
    el.setAttribute('animation__click',{property:"rotation",startEvents:"click",dur:"2000",to:"0 80 0"});
    el.setAttribute('event-set__click',"opened_door = !opened_door;");
