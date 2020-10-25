@@ -46,6 +46,10 @@
           <a-asset-item id="room" src="../assets/models/scenes/apartment/Bedroom/bedroom.obj"></a-asset-item>
           <a-asset-item id="room-mtl" src="../assets/models/scenes/apartment/Bedroom/bedroom.mtl"></a-asset-item>
           <a-asset-item id="house" src="../assets/models/scenes/house_full/house.gltf"></a-asset-item>
+          <a-asset-item id="casa" src="../assets/models/scenes/sweet_3d/casa/casa.obj"></a-asset-item>
+          <a-asset-item id="casa-mtl" src="../assets/models/scenes/sweet_3d/casa/casa.mtl"></a-asset-item>
+          <a-asset-item id="door" src="../assets/models/scenes/sweet_3d/porta/porta_fechada.obj"></a-asset-item>
+          <a-asset-item id="door-mtl" src="../assets/models/scenes/sweet_3d/porta/porta_fechada.mtl"></a-asset-item>
         </a-assets>
   
         <a-entity id="player">
@@ -70,13 +74,12 @@
         <a-entity id="transition" position="3 0 0"></a-entity>
 
         <a-entity id="character" character></a-entity>
-        <a-entity id="clinical" position="0 0.1 -4">
-          <a-entity id="user-anchor" position="0 1.5 0">
-                          
-          </a-entity>
-        </a-entity>
-        <a-sky></a-sky>
-        <a-plane  position="0 0 0" shadow="receive:true" material="color:#00FF00" repeat="50 50" rotation="-90 0 0" scale="50 50"></a-plane>
+        <a-entity id="user-anchor" position="0 0 0"></a-entity>
+        <a-entity id="clinical" model="ext:obj;scene:#casa;material:#casa-mtl;" scale="0.01 0.01 0.01" position="0 0.1 -4"></a-entity>
+        
+
+        <a-sky color="#FF00FF"></a-sky>
+        <a-plane  position="0 0 0" shadow="receive:true" material="color:#00FF00" repeat="20 20" rotation="-90 0 0" scale="20 20"></a-plane>
       </a-scene>
   </body>
 </html>

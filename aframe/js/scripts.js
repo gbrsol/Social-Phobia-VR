@@ -1,4 +1,4 @@
-document.addEventListener('onkeydown',(e)=>{
+document.addEventListener('onkeydown',function(e){
   switch(e.keyCode)
   {
     case 	37: //left
@@ -20,6 +20,10 @@ document.addEventListener('onkeydown',(e)=>{
       exited = true;
     break;
   }
+  pressed_key = true;
+});
+document.addEventListener('onkeyup',function(e){
+  pressed_key = false;
 });
 
 function playCycleAngelAudio()
@@ -52,6 +56,44 @@ function loadSituation(inter)
   setupCharacter(inter);
 }
 
+function waitOpenDoor()
+{
+  while(!opened_door)
+  {
+    console.log('waiting for user to open the door');
+    setTimeout(()=>{}, 500);
+  }
+}
+
+function waitInterventionEnd()
+{
+  while(!finished) // checar algo sobre waitevent ou algo async
+  {
+    console.log('waiting for intervention end')
+    setTimeout(()=>{},300);
+  }console.log(new Date().now().toString() + " Status: Finished the session");
+}
+
+function waitExit()
+{
+  while(!exited)
+  {
+    console.log('waiting for user to exit');
+    setTimeout(()=>{},300);
+  }
+  console.log(new Date().now().toString() + " Status: The session has now ended.....");
+}
+
+function waitTransition()
+{
+  while(!transitioned)
+  {
+    setTimeout(() => {
+      console.log(new Date().now().toString() + " Status: User didn't transition yet");
+    }, 500);
+  }
+}
+
 function playSituation(inter)
 {
   angel = document.querySelector('#angel');
@@ -61,12 +103,7 @@ function playSituation(inter)
   playCycleAngelAudio();
   var scene = inter['scene'];
   var situation = inter['situation'];
-  while(!transitioned)
-  {
-    setTimeout(() => {
-      console.log(new Date().now().toString() + " Status: User didn't transition yet");
-    }, 500);
-  }
+  waitTransition();
   switch(scene)
   {
     case 'house':
@@ -74,40 +111,25 @@ function playSituation(inter)
       {
         case 'relative':
         //pegar pegada na frente da porta e ciclar audio nela
-        while(!opened_door)
-        {
-          setTimeout(()=>{}, 500);
-        }
-        walkToSofa();
+        waitOpenDoor();
+        walkToSofa(); 
         break;
 
         case 'cellphone':
           cellphoneRingtone();
-          while(!opened_door) // porta do quarto
-          {
-            setTimeout(()=>{}, 500);
-          }
+          waitOpenDoor();
           break;
         
         case 'delivery':
-          while(!opened_door)
-          {
-            setTimeout(()=>{},500);
-          }
+          waitOpenDoor()
           break;
           
       }
       break;
   }
-  while(!finished) // checar algo sobre waitevent ou algo async
-  {
-    setTimeout(()=>{},300);
-  }console.log(new Date().now().toString() + " Status: Finished the session");
-  while(!exited)
-  {
-    setTimeout(()=>{},300);
-  }
-  console.log(new Date().now().toString() + " Status: The session has now ended.....");
+  waitInterventionEnd();
+  waitExit();
+  
 }
 
 function walkToSofa()
@@ -167,6 +189,7 @@ function loadSituationFromJSON(inter)
   loadRelax(inter["relax"]);
   loadTransition(inter["transition"]);
   loadClinical(inter["clinical"]["scene"]);
+  loadFootsteps(inter);
   loadSituation(inter["clinical"]);
 }
 function soundTest()
@@ -186,16 +209,64 @@ function loadRelax(relax)
   }
 }
 
+function createFootsteps(positions)
+{
+  var id = 1;
+  /* exemplo casa
+        <a-plane id="foot-1" src="#footstep" goto rotation="-90 0 0" position="6.85164 -39.9465 -0.76414" material="" geometry="" class="clickable"></a-plane>
+        <a-plane id="foot-2" src="#footstep" goto rotation="-90 0 0" position="2.6907 -39.9465 -0.76414" material="" geometry="" class="clickable"></a-plane>
+        <a-plane id="foot-3" src="#footstep" goto rotation="-90 0 0" position="2.6907 -39.9465 3.51758" material="" geometry="" class="clickable"></a-plane>
+        <a-plane id="foot-4" src="#footstep" goto rotation="-90 0 0" position="-3.02575 -39.9465 3.51758" material="" geometry="" class="clickable"></a-plane>
+        <a-plane id="foot-5" src="#footstep" goto rotation="-90 0 0" position="-3.02575 -39.9465 -0.82681" material="" geometry="" class="clickable"></a-plane>
+        <a-plane id="foot-6" src="#footstep" goto rotation="-90 0 0" position="1.70708 -39.9465 1.22194" material="" geometry="" class="clickable"></a-plane> 
+
+  */ 
+  positions.forEach(function(){
+    var el = document.createElement('a-plane');
+    el.setAttribute('rotation','-90 0 0');
+    el.setAttribute('src','#footstep');
+    el.setAttribute('position',this[i].toString());
+    el.classList.add('clickable');
+  });
+}
+
+function loadFootsteps(inter)
+{
+  var scene = inter['scene'];
+  var positions = [];
+  switch(scene)
+  {
+    case 'house':
+      var positions = ["6.85164 -39.9465 -0.76414", 
+                       "2.6907 -39.9465 -0.76414",
+                       "2.6907 -39.9465 3.51758",
+                       "-3.02575 -39.9465 3.51758",
+                       "-3.02575 -39.9465 -0.82681",
+                       "1.70708 -39.9465 1.22194"
+                      ];
+      break;
+
+    case 'shoppingmall':
+      break;
+
+    case 'park':
+      break;
+  }
+  createFootsteps(positions);
+}
+
 function blinkTransition()
 {
   var anchor = document.querySelector('#user-anchor');
   var player = document.querySelector('#player');
+  //var pos = new THREE.Vector3();
+  //anchor.object3D.getWorldPosition(pos);
+  //console.log(pos)
   var pos = anchor.getAttribute('position');
-  var clin = document.querySelector('#clinical');
-  var posclin = clin.getAttribute('position');
-  var abs = {x: pos.x + posclin.x, y: pos.y + posclin.y, z: pos.z + posclin.z};
-
-  player.setAttribute('position', abs); // arrumar pra absoluto
+  var camera = document.querySelector('a-camera');
+  player.setAttribute('position', pos); // arrumar pra absoluto
+  //camera.setAttribute('position',pos);
+  //camera.object3D.position.y +=1.6;
   setTimeout(() => {
     transitioned = true;
   }, 500);
@@ -206,6 +277,7 @@ function loadTransition(trans)
   var el = document.querySelector('#transition');
   var ent = document.createElement('a-entity');
   var plane = document.createElement('a-plane');
+  plane.setAttribute('id','trans-anchor');
   plane.setAttribute('src','#portal');
   plane.setAttribute('scale','2 2');
   plane.setAttribute('material','color','#FF0000');
@@ -233,9 +305,18 @@ function loadTransition(trans)
   el.appendChild(plane);
 }
 
+function createDoor(pos)
+{
+  var scene = document.querySelector('a-scene');
+  var door = document.createElement('a-entity');
+  door.setAttribute('door',"");
+  door.setAttribute('position',pos)
+  scene.appendChild(door);
+}
 function loadClinical(clin)
 {
   var el = document.querySelector('#clinical');
+  var anchor = document.querySelector('#user-anchor');
   // switch to variable as in '#'+clin+'mtl'
   switch(clin)
   {
@@ -243,7 +324,13 @@ function loadClinical(clin)
       el.setAttribute('model',{ext:'obj',scene:'#cabin',material:'#cabin-mtl',scale:'1 1 1'});
       break;
     case 'house':
-      el.setAttribute('model',{scene:'#house',scale:'1 1 1'});
+      el.setAttribute('model',{ext:"obj",scene:'#casa',material:'#casa-mtl'});
+      el.setAttribute('scale','0.01 0.01 0.01'); // pra outra 0.03
+      el.setAttribute('position', '-7 -40 -4');//el.setAttribute('position',"-101.95343 0.1 15.91853")
+      //anchor.setAttribute('position',"1505 1.6 245");
+      anchor.setAttribute('position',"7.60976 -39.9 -0.93902");//<a-entity id="user-anchor" position="7.60976 -39.18216 -0.93902"></a-entity>
+      //<a-entity door="" position="-3.39121 -40 0.4202" scale="0.01 0.01 0.01" animation__click="property: rotation; startEvents: click; dur: 2000; to: 0 80 0" event-set__click="opened_door = !opened_door;"><a-entity position="0 0 -0.65"><a-entity obj-model="obj: ../assets/models/scenes/sweet_3d/porta/porta_fechada.obj; mtl: ../assets/models/scenes/sweet_3d/porta/porta_fechada.mtl"></a-entity></a-entity></a-entity>
+      createDoor('-3.4 -40 0.4 ');
       break;
   }
 }
@@ -291,4 +378,16 @@ function setupCharacter(inter)
       }
       break;
   }
+}
+
+function waitInstruction()
+{
+  setTimeout(() => {
+    //wait keydown
+  }, 500);
+}
+
+function getMoneyGivePizza()
+{
+  var character = document.querySelector('#deliveryman');
 }

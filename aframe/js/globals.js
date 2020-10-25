@@ -42,6 +42,7 @@ var transitioned = false;
 var opened_door = false;
 var finished = false;
 var audios_to_play = new List();
+var pressed_key = false;
 var intervention = {
   "relax": "baloon",
   "transition": "staircase",
