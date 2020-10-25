@@ -363,7 +363,7 @@ function setupCharacter(inter)
           break;
         case 'delivery':
           character.setAttribute('model','scene','#deliveryman');
-          character.setAttribute('position','0 0 0');
+          character.setAttribute('position','0 -40 0');
           break;
       }
       break;

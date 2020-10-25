@@ -18,16 +18,19 @@ AFRAME.registerComponent('animated-avatar',{
     var el = this.el;
     var data = this.data;
     el.addEventListener('idle',function (){
-      el.setAttribute('animation-mixer','clip','idle')
+      el.setAttribute('animation-mixer','clip','Idle')
     });
     el.addEventListener('walk',function (){
-      el.setAttribute('animation-mixer','clip','walk')
+      el.setAttribute('animation-mixer','clip','Walk')
     });
     el.addEventListener('sit',function (){
-      el.setAttribute('animation-mixer','clip','sit')
+      el.setAttribute('animation-mixer','clip','Sit')
     });
     el.addEventListener('talk',function (){
-      el.setAttribute('animation-mixer','clip','talk')
+      el.setAttribute('animation-mixer','clip','Talk')
+    });
+    el.addEventListener('give',function (){
+      el.setAttribute('animation-mixer','clip','Give')
     });
     console.log(this.el.toString() + ': Avatar component registered successfully!');
   }
@@ -178,6 +181,14 @@ AFRAME.registerComponent('door',{
    var el = this.el;
    var data = this.data;
    el.classList.add('clickable');
+   el.setAttribute('model',{ext:'obj',scene:'#door',material:'#door-mtl'});
+   el.addEventListener('click',function(){
+    if(opened_door)
+      el.setAttribute('model',{ext:'obj',scene:'#door',material:'#door-mtl'});
+    else el.setAttribute('model',{ext:'obj',scene:'#door-open',material:'#door-open-mtl'});
+    opened_door = !opened_door;
+   });
+   /*
    el.setAttribute('animation__click',{property:"rotation",startEvents:"click",dur:"2000",to:"0 80 0"});
    el.setAttribute('event-set__click',"opened_door = !opened_door;");
    var parent = document.createElement('a-entity');
@@ -189,5 +200,6 @@ AFRAME.registerComponent('door',{
    parent.appendChild(door);
    el.appendChild(parent);
    el.setAttribute('scale','0.01 0.01 0.01')
+   */
   }
 });
