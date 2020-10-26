@@ -2,16 +2,16 @@ document.addEventListener('onkeydown',function(e){
   switch(e.keyCode)
   {
     case 	37: //left
-
+      //previous audio
       break;
     case 38: //up
-      
+      //spawn angel
       break;
     case 39: //right
-      
+      //next audio
       break;
     case 40: //down
-      
+      //repeat audio
       break;
     case 70: //f
       finished = true;
@@ -135,13 +135,12 @@ function playSituation(inter)
 function walkToSofa()
 {
   var character = document.querySelector('#character');
-  character.emit('walk');
+  character.emit('Salk');
   character.setAttribute('animation','property', 'position', '0 0 0'); // colocar posição do sofá
   character.setAttribute('animation','dur',3000)
   setTimeout(() => {
-    character.setAttribute('animation',"");
   }, 3000);
-  character.emit('sit');
+  character.emit('Sit');
 }
 function angelGreet()
 {
@@ -350,6 +349,34 @@ function loadAngel()
   angel.setAttribute('angel-avatar','');
 }
 
+function getPhone()
+{
+  var phone = document.querySelector('#character');
+  var player = document.querySelector('a-camera');
+  var scene = document.querySelector('a-scene');
+  scene.removeChild(phone);
+  phone = document.createElement('a-entity');
+  createPhone(phone);
+  phone.setAttribute('position','0 1.6 -0.1');
+  player.appendChild(phone);
+  phone_in_hand = true;
+}
+
+function putDownPhone()
+{
+  phone_in_hand = false; 
+  //retirar celular do usuário e voltar pra mesa
+}
+function createPhone(element)
+{
+  element.setAttribute('model','scene','#cellphone');
+  element.setAttribute('scale','0.01 0.01 0.01')
+  element.setAttribute('rotation','180 180 0');
+  element.classList.add('clickable');
+  element.addEventListener('click',function(){
+    getPhone();
+  });
+}
 function setupCharacter(inter)
 {
   var character = document.querySelector('#character');
@@ -365,8 +392,9 @@ function setupCharacter(inter)
           character.setAttribute('position','0 0 0');
         break;
         case 'cellphone':
-          character.setAttribute('model','scene','#cellphone');
-          character.setAttribute('position','0 0 0');
+          // scale="0.01 0.01 0.01" model="scene: #cellphone" position="7.41339 -39.22504 0.55851" rotation="180 180 0"></a-entity>
+          createPhone(character);
+          character.setAttribute('position',"7.41339 -39.22504 0.55851");
           break;
         case 'delivery':
           character.setAttribute('model','scene','#deliveryman');
@@ -384,6 +412,16 @@ function setupCharacter(inter)
         break;
       }
       break;
+    
+    case 'park':
+      switch(situation)
+      {
+        case 'stranger':
+          character.setAttribute('model','scene','#stranger');
+          character.setAttribute('position','0 0 0');
+          break;
+      }
+      break;
   }
 }
 
@@ -397,4 +435,9 @@ function waitInstruction()
 function getMoneyGivePizza()
 {
   var character = document.querySelector('#deliveryman');
+  waitInstruction(); // espera psicólogo falar, em instrução pega o "dinheiro"
+  character.emit('Give')
+  setTimeout(() => {
+    character.emit('Idle')
+  }, 200);
 }

@@ -2,3 +2,4 @@
 2 - Alterar o JSON do anjo dividindo entre positivo, negativo e pergunta
 3 - Realizar interações dos avatares
 4 - Criar saída imersiva
+5 - Refatorar os JSONs como mapas de chaves ao invés de strings

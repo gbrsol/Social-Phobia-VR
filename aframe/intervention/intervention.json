@@ -3,6 +3,6 @@
     "transition": "staircase",
     "clinical": {
       "scene": "house", 
-      "situation": "delivery"
+      "situation": "cellphone"
     }
 }

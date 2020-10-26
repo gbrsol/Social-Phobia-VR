@@ -38,6 +38,7 @@ var angel_audio = {
 
   ]
 };
+var phone_in_hand = false;
 var transitioned = false;
 var opened_door = false;
 var finished = false;

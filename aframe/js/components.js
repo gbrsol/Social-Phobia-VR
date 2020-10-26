@@ -154,30 +154,8 @@ AFRAME.registerComponent('footsteps',{
   }
 });
 
-AFRAME.registerComponent('dooraa', {
-
-  init: function () {
-    // Do something when component first attached.
-    var el = this.el;
-    var data = this.data;
-    el.addEventListener('click',function(){
-      el.setAttribute('animation','');
-    });
-    el.addEventListener('animationended',function (){
-      el.setAttribute('animation','');
-    });
-  }
-});
-
 AFRAME.registerComponent('door',{
   init:function(){
-    /*
-    <a-entity position="-6.853 1.083 -0.7" animation__click="property: rotation; startEvents:click;dur:2000; to:0 80 0">  <!-- Grandparent entity -->
-                <a-entity position="0 0 -0.65">
-                  <a-box position="0 0 0" scale="0.11 2.07 1.06"></a-box>
-                </a-entity>
-              </a-entity>
-    */
    var parent = this.el;
    var el = document.createElement('a-entity')//this.el;
    var data = this.data;
@@ -194,18 +172,5 @@ AFRAME.registerComponent('door',{
     opened_door = !opened_door;
    });
    parent.appendChild(el);
-   /*
-   el.setAttribute('animation__click',{property:"rotation",startEvents:"click",dur:"2000",to:"0 80 0"});
-   el.setAttribute('event-set__click',"opened_door = !opened_door;");
-   var parent = document.createElement('a-entity');
-   parent.setAttribute('position','0 0 -0.65');
-   parent.classList.add('clickable');
-   var door = document.createElement('a-entity');
-   door.classList.add('clickable');
-   door.setAttribute('obj-model',{obj:'#door',mtl:'#door-mtl'});
-   parent.appendChild(door);
-   el.appendChild(parent);
-   el.setAttribute('scale','0.01 0.01 0.01')
-   */
   }
 });
