@@ -1,5 +1,8 @@
 
+var con = function(){
+    //funções de banco
+}
 module.exports = function(app)
 {
-    //funções de banco
+    return con;
 }
