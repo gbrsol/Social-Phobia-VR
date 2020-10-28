@@ -60,8 +60,7 @@ function waitOpenDoor()
 {
   while(!opened_door)
   {
-    console.log('waiting for user to open the door');
-    setTimeout(()=>{}, 500);
+    setTimeout(function(){console.log('waiting for user to open the door');}, 500);
   }
 }
 
@@ -69,8 +68,8 @@ function waitInterventionEnd()
 {
   while(!finished) // checar algo sobre waitevent ou algo async
   {
-    console.log('waiting for intervention end')
-    setTimeout(()=>{},300);
+    
+    setTimeout(function(){console.log('waiting for intervention end')},300);
   }console.log(new Date().now().toString() + " Status: Finished the session");
 }
 
@@ -135,12 +134,14 @@ function playSituation(inter)
 function walkToSofa()
 {
   var character = document.querySelector('#character');
-  character.emit('Salk');
-  character.setAttribute('animation','property', 'position', '0 0 0'); // colocar posição do sofá
-  character.setAttribute('animation','dur',3000)
-  setTimeout(() => {
+  character.emit('walk');
+  // position="0.25171 -40 -0.28302" rotation=""></a-entity>
+  character.setAttribute('animation__tosofa',{property:'position',to:"0.25171 -40 -0.28302",dur: 2500});
+  //character.setAttribute('animation','property', 'position', "0.25171 -40 -0.28302"); // colocar posição do sofá
+  setTimeout(function(){
+    character.setAttribute('rotation','0 0 0');
+    character.emit('sit');
   }, 3000);
-  character.emit('Sit');
 }
 function angelGreet()
 {
@@ -188,8 +189,9 @@ function loadSituationFromJSON(inter)
   loadRelax(inter["relax"]);
   loadTransition(inter["transition"]);
   loadClinical(inter["clinical"]["scene"]);
-  loadFootsteps(inter);
+  loadFootsteps(inter["clinical"]);
   loadSituation(inter["clinical"]);
+  playSituation(inter['clinical']);
 }
 function soundTest()
 {
@@ -221,6 +223,19 @@ function createFootsteps(positions)
         <a-plane id="foot-6" src="#footstep" goto rotation="-90 0 0" position="1.70708 -39.9465 1.22194" material="" geometry="" class="clickable"></a-plane> 
 
   */ 
+  for(var i = 0; i < positions.length; i++)
+  {
+    var el = document.createElement('a-plane');
+    el.setAttribute('id','footsteps-'+ (i+1));
+    el.setAttribute('rotation','-90 0 0');
+    el.setAttribute('src','#footstep');
+    el.setAttribute('goto','');
+    el.setAttribute('position',positions[i]);
+    el.classList.add('clickable');
+    scene.appendChild(el);
+  } 
+  
+  return;
   positions.forEach(function(){
     var el = document.createElement('a-plane');
     el.setAttribute('id','footsteps-'+id);
@@ -237,7 +252,7 @@ function loadFootsteps(inter)
   var scene = inter['scene'];
   var positions = [];
   switch(scene)
-  {
+  { 
     case 'house':
       var positions = ["6.85164 -39.9465 -0.76414", 
                        "2.6907 -39.9465 -0.76414",
@@ -351,30 +366,49 @@ function loadAngel()
 
 function getPhone()
 {
-  var phone = document.querySelector('#character');
-  var player = document.querySelector('a-camera');
-  var scene = document.querySelector('a-scene');
-  scene.removeChild(phone);
-  phone = document.createElement('a-entity');
-  createPhone(phone);
-  phone.setAttribute('position','0 1.6 -0.1');
-  player.appendChild(phone);
-  phone_in_hand = true;
+  if(!phone_in_hand)
+  {
+    var phone = document.querySelector('#character');
+    var player = document.querySelector('a-camera');
+    var scene = document.querySelector('a-scene');
+    scene.removeChild(phone);
+    phone = document.createElement('a-entity');
+    phone.setAttribute('position','0 1.6 -0.1');
+    phone.setAttribute('scale','0.01 0.01 0.01');
+    player.appendChild(phone); // 1 1 1
+    createPhone(phone); // 0.01 0.01 0.01
+    phone_in_hand = true;
+  }
 }
 
 function putDownPhone()
 {
-  phone_in_hand = false; 
-  //retirar celular do usuário e voltar pra mesa
+  if(phone_in_hand)
+  {
+    phone_in_hand = false; 
+    //retirar celular do usuário e voltar pra mesa
+    var character = document.querySelector('#character');
+    var player = document.querySelector('a-camera');
+    var scene = document.querySelector('a-scene');
+    player.removeChild(character);
+    character = document.createElement('a-entity');
+    createPhone(character);
+    character.setAttribute('position',"7.41339 -39.22504 0.55851");
+    character.setAttribute('scale','0.01 0.01 0.01');
+    scene.appendChild(character);
+  }
 }
+
 function createPhone(element)
 {
+  element.setAttribute('id','character');
   element.setAttribute('model','scene','#cellphone');
   element.setAttribute('scale','0.01 0.01 0.01')
   element.setAttribute('rotation','180 180 0');
   element.classList.add('clickable');
   element.addEventListener('click',function(){
     getPhone();
+    console.log('user picked the phone');
   });
 }
 function setupCharacter(inter)
@@ -389,7 +423,10 @@ function setupCharacter(inter)
       {
         case 'relative':
           character.setAttribute('model','scene','#relative');
-          character.setAttribute('position','0 0 0');
+          // position="3.16801 -40 6.63065" rotation="0 180 0"></a-entity>
+          character.setAttribute('position',"3.16801 -40 6.63065");
+          character.setAttribute('rotation',"0 180 0");
+          character.setAttribute('scale','0.5 0.5 0.5');
         break;
         case 'cellphone':
           // scale="0.01 0.01 0.01" model="scene: #cellphone" position="7.41339 -39.22504 0.55851" rotation="180 180 0"></a-entity>
@@ -398,7 +435,9 @@ function setupCharacter(inter)
           break;
         case 'delivery':
           character.setAttribute('model','scene','#deliveryman');
-          character.setAttribute('position','0 -40 0');
+          character.setAttribute('position',"3.16801 -40 6.63065");
+          character.setAttribute('rotation',"0 180 0");
+          character.setAttribute('scale','0.5 0.5 0.5');
           break;
       }
       break;

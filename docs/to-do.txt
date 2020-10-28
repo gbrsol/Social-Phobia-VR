@@ -1,5 +1,8 @@
-1 - Gerar as situações a partir de um JSON
-2 - Alterar o JSON do anjo dividindo entre positivo, negativo e pergunta
-3 - Realizar interações dos avatares
-4 - Criar saída imersiva
-5 - Refatorar os JSONs como mapas de chaves ao invés de strings
+ - Alterar o JSON do anjo dividindo entre positivo, negativo e pergunta
+ - Criar saída imersiva
+ - Refatorar os JSONs como mapas de chaves ao invés de strings ?
+
+ - Criar audios
+ - Posicionar NPCs
+ - Colocar emissão de audios
+ - Arrumar escala do celular/ aprender sobre re-parenting
