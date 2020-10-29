@@ -1,11 +1,17 @@
-function Intervencao(connection){
-    this._connection = connection;
+function IntervencaoDAO(connection){
+    this._connection = connection();  
 }
 
-Intervencao.prototype.insertIntervencao = function(intervencao, callback){
-    //query
+IntervencaoDAO.prototype.insertIntervencao = function(intervencao){
+    this._connection.open(function(err, mongoclient){
+        mongoclient.collection("intervencoes", function(err, collection){
+            collection.insert(intervencao);
+            mongoclient.close();
+        });
+    });
+    console.log('Inserido com sucesso!');
 }
 module.exports = function()
 {
-    return Intervencao;
+    return IntervencaoDAO;
 }

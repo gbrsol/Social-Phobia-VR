@@ -1,0 +1,20 @@
+
+h1{
+	font-weight:bold;
+	text-align:center;
+}
+
+body{
+	color:#FFFFFF;
+	background:#404040;
+	font-family:roboto;
+	font-size: 20px;
+}
+
+.navbar{
+	background:#ffffff;
+}
+
+select{
+	width: auto;
+}
