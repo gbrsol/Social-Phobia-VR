@@ -3,8 +3,31 @@
     </head>
     <body>
         <H1>Form add intervencao</H1>
-        <form action="/" method="POST">
-
+        <form action="/forms/intervencao/salvar" method="POST">
+            <label>Nome</label>
+            <input type="text" id="nome" name="nome" placeholder="Nome da intervenção"/>
+            <br/>
+            <label>Relaxamento</label>
+            <select name="relax" id="relax">
+                <option value="baloon">Balão</option>
+            </select>
+            <label>Transição</label>
+            <select name="transition" id="transition">
+                <option value="tunnel">Túnel</option>
+                <option value="stairs">Escadas</option>
+            </select>
+            <label>Clínico</label>
+            <select name="clinical" id="clinical">
+                <option value="house">Casa</option>
+                <option value="shoppingmall">Shopping</option>
+                <option value="park">Parque</option>
+            </select>
+            <label>Situação</label>
+            <select name="situation" id="situation">
+                <option value="relative">Visita de parente</option>
+                <option value="deliveryman">Entrega de pizza</option>
+                <option value="cellphone">Ligação de celular</option>
+            </select>
         </form>
     </body>
 </html>
