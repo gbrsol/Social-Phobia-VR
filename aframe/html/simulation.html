@@ -36,7 +36,12 @@
     <a-scene>
 
         <a-assets>
-          <audio id="ringtone" src="../assets/audio/knock_door.mp3" preload="auto" crossorigin="anonymous"></audio>
+          <audio id="ringtone" src="../assets/audio/cellphone/ringtone.mp3" preload="auto" crossorigin="anonymous"></audio>
+          <audio id="knock_door" src="../assets/audio/house/knock_door.mp3" preload="auto" crossorigin="anonymous"></audio>
+          <audio id="a-greet" src="../assets/audio/greet.mp3" preload="auto" crossorigin="anonymous"></audio>
+          <audio id="a-house-pos-1" src="../assets/audio/greet.mp3" preload="auto" crossorigin="anonymous"></audio>
+          
+
 
           <a-image id="portal-tex" src="../assets/textures/village.jpg"></a-image>
           <a-image id="footstep" src="../assets/textures/footsteps.png"></a-image>
@@ -77,6 +82,8 @@
         <a-entity id="character" character></a-entity>
         <a-entity id="user-anchor" position="0 0 0"></a-entity>
         <a-entity id="clinical" scale="0.01 0.01 0.01" position="0 0.1 -4"></a-entity>
+
+        <a-entity id="transition-exit"></a-entity>
         
         <a-sky color="#FF00FF"></a-sky>
         <a-plane  position="0 0 0" shadow="receive:true" material="color:#00FF00" repeat="20 20" rotation="-90 0 0" scale="20 20"></a-plane>
