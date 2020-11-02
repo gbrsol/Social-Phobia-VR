@@ -15,11 +15,12 @@ IntervencaoDAO.prototype.insertIntervencao = function(intervencao){
 IntervencaoDAO.prototype.getIntervencao = function(intervencao){
     this._connection.open(function(err, mongoclient){
         mongoclient.collection("intervencoes", function(err, collection){
-            collection.insert(intervencao);
+            var ret = collection.findOne(intervencao);
             mongoclient.close();
         });
     });
     console.log('Inserido com sucesso!');
+    return ret;
 }
 
 module.exports = function()

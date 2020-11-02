@@ -1,7 +1,66 @@
 <html>
     <head>
+        <title>Cadastrar Psicólogo</title>
+
+        <!-- JQuery -->
+		<script src="/js/jquery-2.2.1.js"></script>
+
+		<!-- bootstrap - link cdn -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+	
+		<!-- incluindo css -->
+		<link href="/css/style.css" rel="stylesheet">
     </head>
     <body>
-        <H1>Form add psicologo</H1>
+        <div class="container" color:#FFFFFF>
+            <H1 text-align:center>Formulário de Psicólogo</H1>
+        </div>
+
+        <% if(validacao.length > 0){ %>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="alert alert-danger">
+                        <strong>Atenção!</strong>
+                        <ul>
+                            <% for(var i = 0; i < validacao.length; i++){ %>
+                                <li>
+                                    <%= validacao[i].msg %>
+                                </li>
+                            <% } %>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        <% } %>
+        
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <form action="/forms/form_add_psicologo/salvar" method="POST">
+                        <div class="form-group">
+                            <label for="name">Nome Completo</label>
+                            <input type="text" id="name" name="name" value="<%= campos.name%>" placeholder="Digite seu nome completo" class="form-control"/>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="crp">CRP</label>
+                            <input type="text" id="crp" name="crp" placeholder="Digite seu CRP" value="<%= campos.crp%>"class="form-control"/>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="username">Login</label>
+                            <input type="text" id="username" name="username" placeholder="Digite seu login" value="<%= campos.username%>"class="form-control"/>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="password">Senha</label>
+                            <input type="password" id="password" name="password" placeholder="Digite sua senha" value="<%= campos.password%>"class="form-control"/>
+                        </div>
+    
+                        <button type="submit" class="btn btn-default">Cadastrar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
     </body>
 </html>

@@ -1,6 +1,3 @@
-function waituntil
-
-
 function waitOpenDoor()
 {
   while(!opened_door)
