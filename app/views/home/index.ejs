@@ -1,29 +1,48 @@
 <html>
     <head>
-        <title>Index</title>
+        <title>Home</title>
 
         <!-- JQuery -->
 		<script src="/js/jquery-2.2.1.js"></script>
 
 		<!-- bootstrap - link cdn -->
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-	
+    
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
 		<!-- incluindo css -->
 		<link href="/css/style.css" rel="stylesheet">
     </head>
     <body>
-        <H1>Formularios</H1>
-        <div class="container">
-            <nav class="navbar navbar-dark bg-dark">
-                <!-- Navbar content -->
-                <nav class="navbar navbar-light bg-light">
-                    <div class="buttonwrapper">
-                        <a target="_blank" href="views/admin/form_add_intervencao">
-                            <button class="mdl-button mdl-js-button mdl-js-rippleeffect">Twitter Button</button>
-                        </a>
-                    </div>
-                </nav>
-            </nav>
-        </div>
+        <H1>Social Phobia VR</H1>
+        <nav class="navbar navbar-inverse">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                <a class="navbar-brand" href="/">Home</a>
+                </div>
+                <ul class="nav navbar-nav">
+                    <!--<li class="active"><a href="/">Home</a></li>-->
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Gerência
+                        <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="/forms/form_add_psicologo">Psicólogo</a></li>
+                            <li><a href="/forms/form_add_paciente">Paciente</a></li>
+                            <li><a href="/forms/form_add_tipofobia">Tipo de Fobia</a></li>
+                            <li><a href="/forms/form_add_intervencao">Intervenção</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Sessão
+                        <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="/forms/form_add_sessao">Criar Sessão</a></li>
+                            <li><a href="/forms/form_add_sessao">Executar Sessão</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </nav>
     </body>
 </html>

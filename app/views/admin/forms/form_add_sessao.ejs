@@ -1,20 +1,50 @@
 <html>
     <head>
-        <title>Cadastrar Tipo de Fobia Social</title>
+        <title>Criar Sessão</title>
 
         <!-- JQuery -->
 		<script src="/js/jquery-2.2.1.js"></script>
 
 		<!-- bootstrap - link cdn -->
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-	
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
 		<!-- incluindo css -->
 		<link href="/css/style.css" rel="stylesheet">
     </head>
     <body>
         <div class="container" color:#FFFFFF>
-            <H1 text-align:center>Formulário de Fobia</H1>
+            <H1 text-align:center>Formulário de Sessão</H1>
         </div>
+        <nav class="navbar navbar-inverse">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                <a class="navbar-brand" href="/">Home</a>
+                </div>
+                <ul class="nav navbar-nav">
+                    <!--<li class="active"><a href="/">Home</a></li>-->
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Gerência
+                        <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="/forms/form_add_psicologo">Psicólogo</a></li>
+                            <li><a href="/forms/form_add_paciente">Paciente</a></li>
+                            <li><a href="/forms/form_add_tipofobia">Tipo de Fobia</a></li>
+                            <li><a href="/forms/form_add_intervencao">Intervenção</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Sessão
+                        <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="/forms/form_add_sessao">Criar Sessão</a></li>
+                            <li><a href="/forms/form_add_sessao">Executar Sessão</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </nav>
 
         <% if(validacao.length > 0){ %>
             <div class="row">
@@ -32,25 +62,173 @@
                 </div>
             </div>
         <% } %>
+        <br/>
         
         <div class="container">
-            <div class="row">
-                <div class="col-md-12">
-                    <form action="/forms/form_add_tipofobia/salvar" method="POST">
-                        <div class="form-group">
-                            <label for="name">Nome</label>
-                            <input type="text" id="name" name="name" placeholder="Digite o nome da fobia social" value="<%= campos.name%>"class="form-control"/>
-                        </div>
+            <form action="/forms/form_add_sessao/salvar">
+                <!--Paciente-->
+                <div class="container">
+                    <h1 style="text-align:left">Paciente</h1>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <form action="/forms/form_add_paciente/get" method="POST">
+                                <div class="form-group">
+                                    <label for="id">ID Hospitalar</label>
+                                    <input type="text" id="id" name="id" placeholder="Digite o ID hospitalar" value="<%= campos.id%>"class="form-control"/>
+                                </div>
 
-                        <div class="form-group">
-                            <label for="description">Descrição</label>
-                            <input type="text" id="description" name="description" placeholder="Digite a descrição" value="<%= campos.description%>"class="form-control"/>
+                                <div class="form-group">
+                                    <label for="name">Nome Completo</label>
+                                    <input type="text" id="name" name="name" value="<%= campos.name%>" placeholder="Digite seu nome completo" class="form-control"/>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="age">Idade</label>
+                                    <input type="number" min="1" id="age" name="age" value="<%= campos.age%>" placeholder="Informe sua idade" class="form-control"/>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="sex">Sexo</label>
+                                    <select name="sex" id="sex" class="form-control">
+                                        <option value="Masculino">Masculino</option>
+                                        <option value="Feminino">Feminino</option>
+                                        <option value="Outros">Outros</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="phone">Telefone</label>
+                                    <input type="tel" pattern="[0-9]{2}[0-9]{4,5}[0-9]{4}" id="phone" name="phone" placeholder="(00) 00000-0000" value="<%= campos.phone%>"class="form-control"/>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="address">Endereço Completo</label>
+                                    <input type="text" id="address" name="address" placeholder="" value="<%= campos.address%>"class="form-control"/>
+                                </div>
+            
+                                <br/>
+                                <button type="submit" class="btn btn-success pull-right btn-lg">Buscar</button>
+                                <br/>
+                            </form>
                         </div>
-    
-                        <button type="submit" class="btn btn-default">Cadastrar</button>
-                    </form>
+                    </div>
                 </div>
-            </div>
+
+                <!--Psicologo-->
+                <div class="container">
+                    <h1 style="text-align:left">Psicólogo</h1>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <form action="/forms/form_add_psicologo/get" method="POST">
+                                <div class="form-group">
+                                    <label for="name">Nome Completo</label>
+                                    <input type="text" id="name" name="name" value="<%= campos.name%>" placeholder="Digite seu nome completo" class="form-control"/>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="crp">CRP</label>
+                                    <input type="text" id="crp" name="crp" placeholder="Digite seu CRP" value="<%= campos.crp%>"class="form-control"/>
+                                </div>
+                                <br/>
+                                <button type="submit" class="btn btn-success pull-right btn-lg">Buscar</button>
+                                <br/>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!--Tipo Fobia-->
+                <div class="container">
+                    <h1 style="text-align:left">Tipo de Fobia Social</h1>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <form action="/forms/form_add_tipo_fobia/get" method="POST">
+                                <div class="form-group">
+                                    <label for="name">Nome</label>
+                                    <input type="text" id="name" name="name" placeholder="Digite o nome da fobia social" value="<%= campos.name%>"class="form-control"/>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="description">Descrição</label>
+                                    <input type="text" id="description" name="description" placeholder="Digite a descrição" value="<%= campos.description%>"class="form-control"/>
+                                </div>
+                                
+                                <br/>
+                                <button type="submit" class="btn btn-success pull-right btn-lg">Buscar</button>
+                                <br/>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!--Intervencao-->
+                <div class="container">
+                    <h1 style="text-align:left">Intervenção Clínica</h1>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <form action="/forms/form_add_intervencao/get" method="POST">
+                                <div class="form-group">
+                                    <label for="name">Nome</label>
+                                    <input type="text" id="name" name="name" value="<%= campos.nome%>" placeholder="Nome da intervenção" class="form-control"/>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="description">Descrição</label>
+                                    <input type="text" id="description" name="description" placeholder="Descrição da intervenção" value="<%= campos.descricao%>"class="form-control"/>
+                                </div>
+                                
+                                <div class="form-group">    
+                                    <label for="relax">Relaxamento</label>
+                                    <select name="relax" value="<%= campos.relax%>" id="relax" class="form-control">
+                                        <option value="baloon">Balão</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="transition">Entrada</label>
+                                    <select name="transition" value="<%= campos.transition%>" id="transition" class="form-control">
+                                        <option value="tunnel">Túnel</option>
+                                        <option value="stairs">Escadas</option>
+                                    </select>
+                                </div>
+            
+                                <div class="form-group">
+                                    <label for="clinical">Clínico</label>
+                                    <select name="clinical" value="<%= campos.clinical%>" id="clinical" class="form-control">
+                                        <option value="house">Casa</option>
+                                        <option value="shoppingmall">Shopping</option>
+                                        <option value="park">Parque</option>
+                                    </select>
+                                </div>
+            
+                                <div class="form-group">
+                                    <label for="situation">Roteiro</label>
+                                    <select name="situation" id="situation" class="form-control">
+                                        <option value="relative">Visita de parente</option>
+                                        <option value="deliveryman">Entrega de pizza</option>
+                                        <option value="cellphone">Ligação de celular</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="transition_exit">Saída</label>
+                                    <select name="transition_exit" value="<%= campos.transition_exit%>" id="transition_exit" class="form-control">
+                                        <option value="tunnel">Túnel</option>
+                                        <option value="stairs">Escadas</option>
+                                    </select>
+                                </div>
+            
+                                <br/>
+                                <button type="submit" class="btn btn-success pull-right btn-lg">Buscar</button>
+                                <br/>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <br/>
+            <button type="submit" class="btn btn-success pull-right btn-lg">Cadastrar</button>
+            <br/>
         </div>
     </body>
 </html>

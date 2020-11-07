@@ -1,0 +1,9 @@
+{
+    "relax":"baloon", 
+    "transition": "staircase", 
+    "clinical":{
+        "scene": "house", 
+        "situation": "cellphone"
+        },
+    "transition_exit": "tunnel"
+}

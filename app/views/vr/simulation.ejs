@@ -13,12 +13,15 @@
     <script src="https://rawgit.com/mayognaise/aframe-gif-shader/master/dist/aframe-gif-shader.min.js"></script>
     <script src="https://rawgit.com/mayognaise/aframe-gif-component/master/dist/aframe-gif-component.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://unpkg.com/aframe-look-at-component@0.5.1/dist/aframe-look-at-component.min.js"></script>
 
-    <script src="/js/vr/require.js"></script>
     <!-- <script type="text/javascript" src="../intervention/intervention.JSON"></script>-->
+    <script src="/js/vr/AudioManager.js"></script>
     <script src="/js/vr/globals.js"></script>
     <script src="/js/vr/components.js"></script>
     <script src="/js/vr/scripts.js"></script>
+    <script src="/js/vr/keydown.js"></script>
+    <script src="/js/vr/async.js"></script>
     <!-- LINK ÚTIL PARA DEPOIS 
     https://rishavjayswal.github.io/augmented-reality/
     -->
@@ -44,6 +47,7 @@
           <a-image id="portal-tex" src="/assets/textures/village.jpg"></a-image>
           <a-image id="footstep" src="/assets/textures/footsteps.png"></a-image>
 
+          <a-asset-item id="mario" src="/assets/models/characters/doctor_mario/scene.gltf"></a-asset-item>
           <a-asset-item id="deliveryman" src="/assets/models/characters/david/david.glb"></a-asset-item>
           <a-asset-item id="relative" src="/assets/models/characters/stefani/stefani.glb"></a-asset-item>
           <a-asset-item id="cellphone" src="/assets/models/characters/celular/scene.gltf"></a-asset-item>
@@ -81,7 +85,7 @@
         <a-entity id="user-anchor" position="0 0 0"></a-entity>
         <a-entity id="clinical" scale="0.01 0.01 0.01" position="0 0.1 -4"></a-entity>
 
-        <a-entity id="transition-exit"></a-entity>
+        <a-entity id="transition_exit"></a-entity>
         
         <a-sky color="#FF00FF"></a-sky>
         <a-plane  position="0 0 0" shadow="receive:true" material="color:#00FF00" repeat="20 20" rotation="-90 0 0" scale="20 20"></a-plane>

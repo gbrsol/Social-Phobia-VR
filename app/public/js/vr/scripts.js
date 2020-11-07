@@ -1,42 +1,3 @@
-document.addEventListener('onkeydown',function(e){
-  switch(e.keyCode)
-  {
-    case 	37: //left
-      //previous audio
-      break;
-    case 38: //up
-      //spawn angel
-      break;
-    case 39: //right
-      //next audio
-      break;
-    case 40: //down
-      //repeat audio
-      break;
-    case 70: //f
-      finished = true;
-    break;
-    case 13: //esc
-      exited = true;
-    break;
-  }
-  pressed_key = true;
-});
-document.addEventListener('onkeyup',function(e){
-  pressed_key = false;
-});
-
-function playCycleAngelAudio()
-{
-  var angel = document.querySelector('#angel');
-  angel.components.sound.playSound();
-  var current = angel.getAttribute('sound','src');
-  var index = audios_to_play.indexOf(current)+1;
-  if(index == audios_to_play.length())
-    index = 0;
-  angel.setAttribute('sound','src',audios_to_play[index]);
-}
-
 function loadSituation(inter)
 {
   var relax = document.querySelector('#relax');
@@ -75,24 +36,21 @@ function playSituation(inter)
         case 'relative':
         //pegar pegada na frente da porta e ciclar audio nela
         waitOpenDoor();
-        walkToSofa();
+        //walkToSofa();
         break;
 
         case 'cellphone':
           cellphoneRingtone();
-          waitOpenDoor();
           break;
         
         case 'delivery':
           waitOpenDoor()
           break;
-          
       }
       break;
   }
   waitInterventionEnd();
   waitExit();
-  
 }
 
 function walkToSofa()
@@ -155,7 +113,8 @@ function loadSituationFromJSON(inter)
   loadClinical(inter["clinical"]["scene"]);
   loadFootsteps(inter["clinical"]);
   loadSituation(inter["clinical"]);
-  playSituation(inter['clinical']);
+  loadExit(inter["transition_exit"]);
+  //playSituation(inter['clinical']);
 }
 function soundTest()
 {
@@ -192,8 +151,8 @@ function createFootsteps(positions)
     var el = document.createElement('a-plane');
     el.setAttribute('id','footsteps-'+ (i+1));
     el.setAttribute('rotation','-90 0 0');
-    el.setAttribute('src','#footstep');
-    el.setAttribute('goto','');
+    el.setAttribute('material',{src:'#footstep'});
+    el.setAttribute('blink-teleportation','');
     el.setAttribute('position',positions[i]);
     el.classList.add('clickable');
     scene.appendChild(el);
@@ -299,6 +258,7 @@ function createDoor(pos)
 function loadClinical(clin)
 {
   var el = document.querySelector('#clinical');
+  var scene = document.querySelector('a-scene');
   var anchor = document.querySelector('#user-anchor');
   // switch to variable as in '#'+clin+'mtl'
   switch(clin)
@@ -316,8 +276,58 @@ function loadClinical(clin)
       //<a-entity id="house-door" door="" position="3.05381 -39 5.11742" class="clickable" obj-model="obj: ../assets/models/scenes/sweet_3d/porta/untitled.obj; mtl: ../assets/models/scenes/sweet_3d/porta/untitled.mtl" scale="0.01 0.01 0.01" model="ext: obj; scene: #door; material: #door-mtl"></a-entity>
       //<a-cylinder material="" geometry="" position="2.5057 -39.05853 5.13933" scale="0.01 0.77 0.01"></a-cylinder>
       createDoor("2.5057 -39.05853 5.13933");
+
+      //criar background
+      var planeBedroom = document.createElement('a-plane');
+      planeBedroom.setAttribute('position','6.7 -39 -3')
+      planeBedroom.setAttribute('scale','1.8 1.2 1');
+      planeBedroom.setAttribute('src','#fence');
+
+      var planeLR = document.createElement('a-plane');
+      planeLR.setAttribute('position','-4.2 -38.4 1.3')
+      planeLR.setAttribute('scale','1.8 1.6 1');
+      planeLR.setAttribute('src','#street');
+      planeLR.setAttribute('rotation','0 90 0')
+
+      scene.appendChild(planeBedroom);
+      scene.append(planeLR);
       break;
   }
+}
+
+function loadExit(trans)
+{
+  var el = document.querySelector('#transition');
+  var ent = document.createElement('a-entity');
+  var plane = document.createElement('a-plane');
+  plane.setAttribute('id','trans-anchor');
+  plane.setAttribute('src','#portal');
+  plane.setAttribute('scale','2 2');
+  plane.setAttribute('material','color','#FF0000');
+  //plane.addEventListener('click',function(){blinkTransition();});
+  plane.classList.add('clickable');
+  plane.addEventListener('click',function(){sessionReport()})
+  switch(trans)
+  {
+    case 'tunnel':
+      el.setAttribute('model','scene','#tunnel');
+      el.setAttribute('model','scale','0.01 0.01 0.03');
+      // check position later
+      plane.setAttribute('position','0 1.5 -4');
+      //el.appendChild(ent);
+      el.setAttribute('position','0 -40 0');
+      break;
+
+    case 'staircase':
+      el.setAttribute('model','scene','#staircase');
+      el.setAttribute('scale','0.1 0.1 0.1');
+      el.setAttribute('position',"5 -47.5 -8");
+      el.setAttribute('rotation','0 90 0');
+      plane.setAttribute('scale','30 30 30');
+      plane.setAttribute('position','13 17 -8.5');
+      break;    
+  }
+  el.appendChild(plane);
 }
 
 function loadAngel()
@@ -332,16 +342,19 @@ function getPhone()
 {
   if(!phone_in_hand)
   {
-    var phone = document.querySelector('#character');
-    var player = document.querySelector('a-camera');
-    var scene = document.querySelector('a-scene');
-    scene.removeChild(phone);
-    phone = document.createElement('a-entity');
-    phone.setAttribute('position','0 1.6 -0.1');
-    phone.setAttribute('scale','0.01 0.01 0.01');
-    player.appendChild(phone); // 1 1 1
-    createPhone(phone); // 0.01 0.01 0.01
-    phone_in_hand = true;
+    var scene = document.querySelector('a-scene')
+    var cell = document.querySelector('#character')
+    var cam = document.querySelector('a-camera')
+    var ent = document.querySelector('a-entity')//cell.cloneNode()
+    
+    scene.removeChild(cell)
+    cam.appendChild(ent)
+
+    ent.setAttribute('position','0.10215 -0.06117 -0.02942');
+    ent.setAttribute('rotation','-120 -80 0');
+    ent.setAttribute('model','scene','#cellphone');
+    ent.setAttribute('scale', '0.01 0.01 0.01');
+    report.push(new Date().getTime()+": O usuário pegou o celular");
   }
 }
 
@@ -360,6 +373,7 @@ function putDownPhone()
     character.setAttribute('position',"7.41339 -39.22504 0.55851");
     character.setAttribute('scale','0.01 0.01 0.01');
     scene.appendChild(character);
+    report.push(new Date().getTime() + ": O usuário colocou o celular na mesa");
   }
 }
 
@@ -437,4 +451,10 @@ function getMoneyGivePizza()
   setTimeout(() => {
     character.emit('Idle')
   }, 200);
+}
+
+function sessionReport()
+{
+  //enviar para o relatório uma string
+  app.app.controllers.admin.insert_relatorio(report);
 }

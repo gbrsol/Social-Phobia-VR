@@ -1,0 +1,39 @@
+<html>
+    <head>
+        <title>Criar Sessão</title>
+
+        <!-- JQuery -->
+		<script src="/js/jquery-2.2.1.js"></script>
+
+		<!-- bootstrap - link cdn -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+		<!-- incluindo css -->
+		<link href="/css/style.css" rel="stylesheet">
+    </head>
+    <body>
+        <div class="container" color:#FFFFFF>
+            <H1 text-align:center>Formulário de Sessão</H1>
+        </div>
+
+        <% if(validacao.length > 0){ %>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="alert alert-danger">
+                        <strong>Atenção!</strong>
+                        <ul>
+                            <% for(var i = 0; i < validacao.length; i++){ %>
+                                <li>
+                                    <%= validacao[i].msg %>
+                                </li>
+                            <% } %>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        <% } %>
+
+    </body>
+</html>

@@ -1,9 +1,22 @@
+async function wait(funcao)
+{
+  await funcao();
+  return new Promise((resolve, reject) => {
+    
+  })
+}
+
 function waitOpenDoor()
 {
+  /*
   while(!opened_door)
   {
     setTimeout(function(){console.log('waiting for user to open the door');}, 500);
-  }
+  }*/
+  var door = document.querySelector('#door');
+  door.addEventListener('animationend',function(){
+    walkToSofa();
+  });
 }
 
 function waitInterventionEnd()

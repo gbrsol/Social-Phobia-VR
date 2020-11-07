@@ -15,7 +15,7 @@ IntervencaoDAO.prototype.insertIntervencao = function(intervencao){
 IntervencaoDAO.prototype.getIntervencao = function(intervencao){
     this._connection.open(function(err, mongoclient){
         mongoclient.collection("intervencoes", function(err, collection){
-            var ret = collection.findOne(intervencao);
+            var ret = collection.find({name: intervencao.name}).toArray();
             mongoclient.close();
         });
     });

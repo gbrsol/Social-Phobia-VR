@@ -1,8 +1,4 @@
- - Alterar o JSON do anjo dividindo entre positivo, negativo e pergunta
- - Criar saída imersiva
- - Refatorar os JSONs como mapas de chaves ao invés de strings ?
-
- - Criar audios
- - Posicionar NPCs
  - Colocar emissão de audios
- - Arrumar escala do celular/ aprender sobre re-parenting
+ - Criar página de início de sessão(model, route e controller já estão criados)
+
+ - Aprender async/await
