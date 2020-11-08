@@ -17,6 +17,7 @@ document.addEventListener('onkeydown',function(e){
             audio_manager.nextNegative();
             break;
     }
+    console.log(e.key.toString());
     pressed_key = true;
   });
   document.addEventListener('onkeyup',function(e){

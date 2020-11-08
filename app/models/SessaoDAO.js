@@ -15,7 +15,7 @@ SessaoDAO.prototype.insertSessao = function(sessao){
 SessaoDAO.prototype.getSessao = function(sessao){
     this._connection.open(function(err, mongoclient){
         mongoclient.collection("sessoes", function(err, collection){
-            var ret = collection.findOne(sessao);
+            var sess = collection.find({paciente: sessao.paciente.name});
             mongoclient.close();
         });
     });

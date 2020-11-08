@@ -27,6 +27,32 @@
     -->
   </head>
   <body>
+    <script>
+            
+      window.addEventListener('onkeydown',(e) =>{
+
+          switch(e.keyCode)
+          {
+              case 24:
+                  audio_manager.play();
+                  break;
+              case 25:
+                  audio_manager.nextQuestion();
+                  break;
+              case 26:
+                  audio_manager.nextPositive();
+                  break;
+              case 27:
+                  audio_manager.nextNegative();
+                  break;
+          }
+          console.log(e.key.toString());
+          pressed_key = true;
+      });
+      window.addEventListener('onkeyup',function(e){
+          pressed_key = false;
+      });
+  </script>
     <!--
       <div id="angel-text" class="container p-3 mb-2 bg-dark text-white">
       Bom dia, hoje realizaremos uma consulta
@@ -39,13 +65,15 @@
     <a-scene>
 
         <a-assets>
-          <audio id="ringtone" src="/assets/audio/cellphone/ringtone.mp3" preload="auto" crossorigin="anonymous"></audio>
-          <audio id="knock_door" src="/assets/audio/house/knock_door.mp3" preload="auto" crossorigin="anonymous"></audio>
-          <audio id="a-greet" src="/assets/audio/greet.mp3" preload="auto" crossorigin="anonymous"></audio>
-          <audio id="a-house-pos-1" src="/assets/audio/greet.mp3" preload="auto" crossorigin="anonymous"></audio>
+          <audio id="ringtone" src="/assets/audio/house/cellphone/ringtone.mp3" preload="auto" crossorigin="anonymous"></audio>
+          <audio id="knock_door" src="/assets/audio/house/relative/knock_door.mp3" preload="auto" crossorigin="anonymous"></audio>
+          <audio id="angel_audio_greeting" src="/assets/audio/angel/greet.mp3" preload="auto" crossorigin="anonymous"></audio>
+          <audio id="relative_positive_1" src="/assets/audio/house/relative/p_1.mp3" preload="auto" crossorigin="anonymous"></audio>
 
           <a-image id="portal-tex" src="/assets/textures/village.jpg"></a-image>
           <a-image id="footstep" src="/assets/textures/footsteps.png"></a-image>
+          <a-image id="fence" src="/assets/textures/fence.png"></a-image>
+          <a-image id="street" src="/assets/textures/street.jpg"></a-image>
 
           <a-asset-item id="mario" src="/assets/models/characters/doctor_mario/scene.gltf"></a-asset-item>
           <a-asset-item id="deliveryman" src="/assets/models/characters/david/david.glb"></a-asset-item>
@@ -87,7 +115,7 @@
 
         <a-entity id="transition_exit"></a-entity>
         
-        <a-sky color="#FF00FF"></a-sky>
+        <a-sky color="#35e0f0"></a-sky>
         <a-plane  position="0 0 0" shadow="receive:true" material="color:#00FF00" repeat="20 20" rotation="-90 0 0" scale="20 20"></a-plane>
       </a-scene>
   </body>

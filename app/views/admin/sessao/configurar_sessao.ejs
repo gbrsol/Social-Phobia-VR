@@ -1,6 +1,6 @@
 <html>
     <head>
-        <title>Cadastrar Tipo de Fobia Social</title>
+        <title>Pré-sessão</title>
 
         <!-- JQuery -->
 		<script src="/js/jquery-2.2.1.js"></script>
@@ -15,7 +15,7 @@
     </head>
     <body>
         <div class="container" color:#FFFFFF>
-            <H1 text-align:center>Iniciar sessão</H1>
+            <H1 text-align:center>Pré-sessão</H1>
         </div>
         <nav class="navbar navbar-inverse">
             <div class="container-fluid">
@@ -39,7 +39,7 @@
                         <span class="caret"></span></a>
                         <ul class="dropdown-menu">
                             <li><a href="/forms/form_add_sessao">Criar Sessão</a></li>
-                            <li><a href="/forms/form_add_sessao">Executar Sessão</a></li>
+                            <li><a href="/sessao/configurar_sessao">Executar Sessão</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -64,17 +64,20 @@
         <% } %>
         
         <div class="container">
-            <form action="/vr/simulation/start" method="POST">
+            <form action="/vr/simulation" method="POST">
                 <div class="container">
                     <div class="row">
                         <div class="col-md-12">
-                            <form action="/forms/form_add_sessao/get" method="POST">
-        
+                            <form action="/forms/form_add_sessao/getAll" method="POST">
+
                                 <div class="form-group">
-                                    <label for="name">Nome</label>
-                                    <input type="text" id="name" name="name" placeholder="Digite o nome do paciente" value="<%= campos.name%>"class="form-control"/>
+                                    <label for="sessoes">Intervenção</label>
+                                    <select name="sessoes" value="<%= campos.sessoes%>" id="sessoes" class="form-control">
+                                        <% if( sessoes.length > 0 ) {%>
+                                            
+                                        <%}%>
+                                    </select>
                                 </div>
-            
                                 <button type="submit" class="btn btn-primary">Buscar</button>
                             </form>
                         </div>

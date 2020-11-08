@@ -1,21 +1,4 @@
-function loadSituation(inter)
-{
-  var relax = document.querySelector('#relax');
-  var trans = document.querySelector('#transition');
-  var clin = document.querySelector('#clinical');
-  /*switch(inter["scene"])
-  {
-    case 'house':
-      // ajustar posições
-      relax.setAttribute('position',"-0.35 2 -8");
-      trans.setAttribute('position',"7 0 -6");
-      clin.setAttribute('position',"-10 -20 0");
-      break;
-  }
-  */
-  //loadInteractives(inter); // doors, etc
-  setupCharacter(inter);
-}
+
 
 
 function playSituation(inter)
@@ -114,7 +97,8 @@ function loadSituationFromJSON(inter)
   loadFootsteps(inter["clinical"]);
   loadSituation(inter["clinical"]);
   loadExit(inter["transition_exit"]);
-  //playSituation(inter['clinical']);
+  loadAngel();
+  playSituation(inter['clinical']);
 }
 function soundTest()
 {
@@ -280,7 +264,7 @@ function loadClinical(clin)
       //criar background
       var planeBedroom = document.createElement('a-plane');
       planeBedroom.setAttribute('position','6.7 -39 -3')
-      planeBedroom.setAttribute('scale','1.8 1.2 1');
+      planeBedroom.setAttribute('scale','2 1.270 1');
       planeBedroom.setAttribute('src','#fence');
 
       var planeLR = document.createElement('a-plane');
@@ -297,10 +281,10 @@ function loadClinical(clin)
 
 function loadExit(trans)
 {
-  var el = document.querySelector('#transition');
+  var el = document.querySelector('#transition_exit');
   var ent = document.createElement('a-entity');
   var plane = document.createElement('a-plane');
-  plane.setAttribute('id','trans-anchor');
+  plane.setAttribute('id','trans-exit-anchor');
   plane.setAttribute('src','#portal');
   plane.setAttribute('scale','2 2');
   plane.setAttribute('material','color','#FF0000');

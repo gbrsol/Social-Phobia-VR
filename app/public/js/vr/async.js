@@ -13,9 +13,9 @@ function waitOpenDoor()
   {
     setTimeout(function(){console.log('waiting for user to open the door');}, 500);
   }*/
-  var door = document.querySelector('#door');
+  var door = document.querySelector('#house-door');
   door.addEventListener('animationend',function(){
-    walkToSofa();
+    setTimeout(function(){walkToSofa();},300);
   });
 }
 
@@ -23,10 +23,9 @@ function waitInterventionEnd()
 {
   while(!finished) // checar algo sobre waitevent ou algo async
   {
-    
     setTimeout(function(){console.log('waiting for intervention end')},300);
   }
-  console.log(new Date().now().toString() + " Status: Finished the session");
+  report.push(new Date().now().toString() + " Status: Finished the session");
 }
 
 function waitExit()
@@ -36,7 +35,7 @@ function waitExit()
     console.log('waiting for user to exit');
     setTimeout(()=>{},300);
   }
-  console.log(new Date().now().toString() + " Status: The session has now ended.....");
+  report.push(new Date().now().toString() + " Status: The session has now ended.....");
 }
 
 function waitTransition()

@@ -1,7 +1,6 @@
 function AudioManager(inter)
 {
     this.el = document.querySelector('#angel');
-    this.audio = el.components.sound;
     var scene = inter["clinical"]["scene"];
     var situation = inter["clinical"]["situation"];
     this.pIndex = 0;
@@ -72,53 +71,53 @@ function AudioManager(inter)
           }
         ] //, espaço para novas situações
       };
-      this.audio_list = this.angel_audio[scene][situation];
-      this.audio = this.audio_list["greeting"][0];
+      this.audio_list = angel_audio[scene][situation];
+      this.audio = angel_audio["greeting"][0];
 }
 
-AudioManager.prototype.play() = function ()
+AudioManager.prototype.play = function ()
 {
     this.audio.playSound();
 }
 
-AudioManager.prototype.pause() = function ()
+AudioManager.prototype.pause = function ()
 {
     this.audio.pauseSound();
 }
 
-AudioManager.prototype.nextPositive() = function()
+AudioManager.prototype.nextPositive = function()
 {
     this.element.setAttribute('sound','src',audio_list["positive"][pIndex++]);
     this.play();
 }
 
-AudioManager.prototype.lastPositive() = function()
+AudioManager.prototype.lastPositive = function()
 {
     if(this.pIndex > 0)
         this.element.setAttribute('sound','src',audio_list["positive"][pIndex--]);
     this.play();
 }
 
-AudioManager.prototype.nextNegative() = function()
+AudioManager.prototype.nextNegative = function()
 {
     this.element.setAttribute('sound','src',audio_list["negative"][nIndex++]);
     this.play();
 }
 
-AudioManager.prototype.lastNegative() = function()
+AudioManager.prototype.lastNegative = function()
 {
     if(this.nIndex > 0)
         this.element.setAttribute('sound','src',audio_list["negative"][nIndex++]);
     this.play();
 }
 
-AudioManager.prototype.nextQuestion() = function()
+AudioManager.prototype.nextQuestion = function()
 {
     this.element.setAttribute('sound','src',audio_list["question"][qIndex++]);
     this.play();
 }
 
-AudioManager.prototype.lastQuestion() = function()
+AudioManager.prototype.lastQuestion = function()
 {
     if(this.qIndex > 0)
         this.element.setAttribute('sound','src',audio_list["question"][qIndex--]);

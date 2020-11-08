@@ -88,8 +88,7 @@ AFRAME.registerComponent('angel-avatar',{
   {
     var el = this.el;
     var data = this.data;
-
-    el.components.sound.playSound();
+    el.setAttribute('sound','');
   }
 });
 

@@ -36,4 +36,8 @@ module.exports = function(app)
     app.post('/forms/form_add_sessao/salvar',function(req, res){
         app.app.controllers.admin.insert_sessao(app, req, res);
     });
+
+    app.get('/sessao/configurar_sessao', function(req, res){
+        app.app.controllers.admin.configurar_sessao(app, req, res);
+    }); 
 }

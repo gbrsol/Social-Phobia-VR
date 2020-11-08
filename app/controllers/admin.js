@@ -134,7 +134,7 @@ module.exports.insert_sessao= function(app, req, res)
     var erros = req.validationErrors();
     if(erros)
     {
-        res.render("admin/forms/form_sessao", {validacao: erros, campos: dados});
+        res.render("admin/forms/form_add_sessao", {validacao: erros, campos: dados});
         console.log('houve erros de form');
         return;
     }
@@ -143,4 +143,9 @@ module.exports.insert_sessao= function(app, req, res)
     var SessaoDAO = new app.app.models.SessaoDAO(connection);
     SessaoDAO.insertSessao(dados);
     res.send(dados);
+}
+
+module.exports.configurar_sessao = function(app, req, res)
+{
+    res.render('admin/sessao/configurar_sessao',{validacao: {}, campos:{}});
 }
