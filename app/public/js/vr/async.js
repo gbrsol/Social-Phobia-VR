@@ -14,9 +14,12 @@ function waitOpenDoor()
     setTimeout(function(){console.log('waiting for user to open the door');}, 500);
   }*/
   var door = document.querySelector('#house-door');
-  door.addEventListener('animationend',function(){
-    setTimeout(function(){walkToSofa();},300);
-  });
+  door.addEventListener('animationend', function(){
+    setTimeout((function(){
+      walkToSofa();
+    }), 700);
+    console.log('aaaaaaa');
+  })
 }
 
 function waitInterventionEnd()

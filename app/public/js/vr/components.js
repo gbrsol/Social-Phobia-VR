@@ -32,7 +32,6 @@ AFRAME.registerComponent('animated-avatar',{
     el.addEventListener('give',function (){
       el.setAttribute('animation-mixer','clip','Give')
     });
-    console.log(this.el.toString() + ': Avatar component registered successfully!');
   }
 });
 
@@ -54,7 +53,6 @@ AFRAME.registerComponent('model',{
     else
       el.setAttribute('gltf-model',data.scene);
     el.setAttribute('scale',data.scale);
-    console.log(this.el.toString() + ': Model component registered successfully!');
   }
 });
 
@@ -120,11 +118,12 @@ AFRAME.registerComponent('door',{
    el.addEventListener('click',function(){
      console.log('the door was clicked');
     if(opened_door)
-      parent.setAttribute('animation__click',{property:"rotation",startEvents:"click",dur:"2000",to:"0 0 0"});//  el.setAttribute('model',{ext:'obj',scene:'#door',material:'#door-mtl'});
+      parent.setAttribute('animation__click',{property:"rotation",startEvents:"click",dur:"500",to:"0 0 0"});//  el.setAttribute('model',{ext:'obj',scene:'#door',material:'#door-mtl'});
     else 
-      parent.setAttribute('animation__click',{property:"rotation",startEvents:"click",dur:"2000",to:"0 -80 0"});//  el.setAttribute('model',{ext:'obj',scene:'#door-open',material:'#door-open-mtl'});
+      parent.setAttribute('animation__click',{property:"rotation",startEvents:"click",dur:"500",to:"0 -80 0"});//  el.setAttribute('model',{ext:'obj',scene:'#door-open',material:'#door-open-mtl'});
     opened_door = !opened_door;
    });
+   
    parent.appendChild(el);
   }
 });

@@ -1,6 +1,6 @@
-function AudioManager(inter)
+function AudioManager(element, inter)
 {
-    this.el = document.querySelector('#angel');
+    this.el = element;
     var scene = inter["clinical"]["scene"];
     var situation = inter["clinical"]["situation"];
     this.pIndex = 0;
@@ -64,15 +64,21 @@ function AudioManager(inter)
               medo e ficar ansioso. Aos poucos podemos enfrentar esses novos desafios, gostaria de tentar?"}], // segundo e terceiro neg voz do psicologo
       
               "question": [{"id": "#delivery_question_1", "transcript": "Estamos sozinhos, você vai a atender a campainha?"},
-                          {"id": "delivery_question_2" , "transcript" : "Gostaria de continuar?"},
-                          {"id": "delivery_question_3" , "transcript" : "não se preocupe, o entregador não está focado na sua\
+                          {"id": "#delivery_question_2" , "transcript" : "Gostaria de continuar?"},
+                          {"id": "#delivery_question_3" , "transcript" : "não se preocupe, o entregador não está focado na sua\
                           assinatura, mas no tempo que ele precisa para entregar. Gostaria de continuar?"},]
             }
           }
         ] //, espaço para novas situações
       };
-      this.audio_list = angel_audio[scene][situation];
+      for(var i = 0; angel_audio[scene][i].situation != situation ;i++)
+        this.audio_list = angel_audio[scene][i].audios; 
       this.audio = angel_audio["greeting"][0];
+
+      console.log("This is the List of Audios: \n" + this.audio_list.toString());
+      console.log("This is the current audio: \n" + this.audio.toString());
+      this.el.setAttribute('sound','src',this.audio);
+      console.log('Audio Manager started')
 }
 
 AudioManager.prototype.play = function ()
@@ -87,40 +93,40 @@ AudioManager.prototype.pause = function ()
 
 AudioManager.prototype.nextPositive = function()
 {
-    this.element.setAttribute('sound','src',audio_list["positive"][pIndex++]);
+    this.el.setAttribute('sound','src',audio_list["positive"][pIndex++]);
     this.play();
 }
 
 AudioManager.prototype.lastPositive = function()
 {
     if(this.pIndex > 0)
-        this.element.setAttribute('sound','src',audio_list["positive"][pIndex--]);
+        this.el.setAttribute('sound','src',audio_list["positive"][pIndex--]);
     this.play();
 }
 
 AudioManager.prototype.nextNegative = function()
 {
-    this.element.setAttribute('sound','src',audio_list["negative"][nIndex++]);
+    this.el.setAttribute('sound','src',audio_list["negative"][nIndex++]);
     this.play();
 }
 
 AudioManager.prototype.lastNegative = function()
 {
     if(this.nIndex > 0)
-        this.element.setAttribute('sound','src',audio_list["negative"][nIndex++]);
+        this.el.setAttribute('sound','src',audio_list["negative"][nIndex++]);
     this.play();
 }
 
 AudioManager.prototype.nextQuestion = function()
 {
-    this.element.setAttribute('sound','src',audio_list["question"][qIndex++]);
+    this.el.setAttribute('sound','src',audio_list["question"][qIndex++]);
     this.play();
 }
 
 AudioManager.prototype.lastQuestion = function()
 {
     if(this.qIndex > 0)
-        this.element.setAttribute('sound','src',audio_list["question"][qIndex--]);
+        this.el.setAttribute('sound','src',audio_list["question"][qIndex--]);
     this.play();
 }
 

@@ -1,4 +1,18 @@
-var audio_manager = new AudioManager(intervention);
+
+
+function initializeAudio()
+{
+    var avataranjo = document.querySelector('#angel');
+    var audio_manager = new AudioManager(avataranjo,{
+        "relax":"baloon", 
+        "transition": "staircase", 
+        "clinical":{
+            "scene": "house", 
+            "situation": "relative"
+            },
+        "transition_exit": "staircase"
+    });
+}
 
 document.addEventListener('onkeydown',function(e){
 

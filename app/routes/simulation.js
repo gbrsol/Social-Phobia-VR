@@ -4,4 +4,7 @@ module.exports = function(app)
     app.get('/simulation', function(req, res){
         app.app.controllers.simulation.start_simulation(app, req, res);
     })
+    app.get('/sandbox', function(req, res){
+        app.app.controllers.simulation.sandbox(app, req, res);
+    })
 }

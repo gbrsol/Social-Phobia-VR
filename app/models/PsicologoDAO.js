@@ -12,10 +12,27 @@ PsicologoDAO.prototype.insertPsicologo = function(psi){
     console.log('Inserido com sucesso!');
 }
 
-PsicologoDAO.prototype.getPsicologo = function(psi){
+PsicologoDAO.prototype.get = function(psi){
+    var ret;
     this._connection.open(function(err, mongoclient){
         mongoclient.collection("psicologo", function(err, collection){
-            var ret = collection.findOne({crp:psi.crp});
+            collection.find({crp:psi.crp}).toArray(function(err, result){
+                ret = result;
+            });
+            mongoclient.close();
+        });
+    });
+    console.log('Inserido com sucesso!');
+    return ret;
+}
+PsicologoDAO.prototype.getAll = function(res){
+    var ret;
+    this._connection.open(function(err, mongoclient){
+        mongoclient.collection("psicologo", function(err, collection){
+            collection.find({}).toArray(function(err, result){
+                ret = result;
+                res.render('/forms/form_add_sessao', {paciente:paciente, psicologo: ret, tipofobia: tipofobia, intervencao: intervencao})
+            });
             mongoclient.close();
         });
     });

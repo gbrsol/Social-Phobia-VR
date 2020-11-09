@@ -70,6 +70,8 @@ var transitioned = false;
 var opened_door = false;
 var finished = false;
 var pressed_key = false;
+var interacted_with_npc = false;
+
 
 var intervention = {
   "relax": "baloon",

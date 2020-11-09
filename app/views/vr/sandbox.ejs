@@ -36,26 +36,14 @@
     -->
     <a-scene>
 
+      <script>
+        var sphere = document.querySelector('a-sphere');
+        sphere.addEventListener('animationend',(e)=>{
+          sphere.setAttribute('color','#FF0000')
+        })
+      </script>
         <a-assets>
-          <audio id="ringtone" src="/assets/audio/cellphone/ringtone.mp3" preload="auto" crossorigin="anonymous"></audio>
-          <audio id="knock_door" src="/assets/audio/house/knock_door.mp3" preload="auto" crossorigin="anonymous"></audio>
-          <audio id="a-greet" src="/assets/audio/greet.mp3" preload="auto" crossorigin="anonymous"></audio>
-          <audio id="a-house-pos-1" src="/assets/audio/greet.mp3" preload="auto" crossorigin="anonymous"></audio>
-
-          <a-image id="portal-tex" src="/assets/textures/village.jpg"></a-image>
-          <a-image id="footstep" src="/assets/textures/footsteps.png"></a-image>
-
-          <a-asset-item id="mario" src="/assets/models/characters/doctor_mario/scene.gltf"></a-asset-item>
-          <a-asset-item id="deliveryman" src="/assets/models/characters/david/david.glb"></a-asset-item>
-          <a-asset-item id="relative" src="/assets/models/characters/stefani/stefani.glb"></a-asset-item>
-          <a-asset-item id="cellphone" src="/assets/models/characters/celular/scene.gltf"></a-asset-item>
-
-          <a-asset-item id="tunnel" src="/assets/models/scenes/arc_tunnel/scene.gltf"></a-asset-item>
-          <a-asset-item id="staircase" src="/assets/models/scenes/staircase/StairCase_170.gltf"></a-asset-item>
-          <a-asset-item id="casa" src="/assets/models/scenes/sweet_3d/casa/casa.obj"></a-asset-item>
-          <a-asset-item id="casa-mtl" src="/assets/models/scenes/sweet_3d/casa/casa.mtl"></a-asset-item>
-          <a-asset-item id="door" src="/assets/models/scenes/sweet_3d/porta/nova_fechada.obj"></a-asset-item>
-          <a-asset-item id="door-mtl" src="/assets/models/scenes/sweet_3d/porta/nova_fechada.mtl"></a-asset-item>
+          
         </a-assets>
   
         <a-entity id="player">
@@ -75,9 +63,13 @@
               </a-camera>
         </a-entity>
         
-        <a-entity id="mod" position="0 1 -1" gltf-model="#cellphone" scale="0.01 0.01 0.01"></a-entity>
+        <a-sphere id="sphere" color="#FF00FF" position="0 1 -3"
+        animation__1="property: position; from: 0 1 -3; to: 0 2 -3; dur: 1000;">
+
+        </a-sphere>
         <a-plane  position="0 0 0" shadow="receive:true" material="color:#00FF00" repeat="20 20" rotation="-90 0 0" scale="20 20"></a-plane>
-        <a-entity id="mod" position="0.10215 -0.06117 -0.02942" gltf-model="/assets/models/characters/celular/scene.gltf" scale="0.01 0.01 0.01" rotation="-120 -80 0"></a-entity>
+        <!--<a-entity id="mod" position="0.10215 -0.06117 -0.02942" gltf-model="/assets/models/characters/celular/scene.gltf" scale="0.01 0.01 0.01" rotation="-120 -80 0"></a-entity>
+        -->
       </a-scene>
   </body>
 </html>

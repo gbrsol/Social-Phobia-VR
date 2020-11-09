@@ -26,27 +26,35 @@
     https://rishavjayswal.github.io/augmented-reality/
     -->
   </head>
-  <body>
+  <body onload="initializeAudio()">
     <script>
             
-      window.addEventListener('onkeydown',(e) =>{
+      window.addEventListener('keydown',(e) =>{
 
           switch(e.keyCode)
           {
-              case 24:
+              case 37:
                   audio_manager.play();
+                  console.log("Repeat")
                   break;
-              case 25:
+              case 39:
                   audio_manager.nextQuestion();
+                  console.log("Next Question")
                   break;
-              case 26:
+              case 38:
                   audio_manager.nextPositive();
+                  console.log("Next Positive")
                   break;
-              case 27:
+              case 40:
                   audio_manager.nextNegative();
+                  console.log("Next Negative")
                   break;
+              case 80:
+              context.resume().then(() => {
+                console.log('Playback resumed successfully');});
+              break;
           }
-          console.log(e.key.toString());
+          //console.log(e.key.toString());
           pressed_key = true;
       });
       window.addEventListener('onkeyup',function(e){

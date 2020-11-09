@@ -1,4 +1,2 @@
- - Colocar emissão de audios
- - Criar página de início de sessão(model, route e controller já estão criados)
-
- - Aprender async/await
+ - Preencher comboboxes com dados do mongodb
+ - arrumar eventos de porta

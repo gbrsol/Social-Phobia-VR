@@ -123,7 +123,7 @@ module.exports.insert_tipofobia= function(app, req, res)
 
 module.exports.formulario_add_sessao = function(app, req, res)
 {
-    res.render('admin/forms/form_add_sessao',{validacao: {}, campos:{}});
+    res.render('admin/forms/form_add_sessao',{validacao: {}, campos: {}, intervencao: {}});
 }
 module.exports.insert_sessao= function(app, req, res)
 {
@@ -140,12 +140,25 @@ module.exports.insert_sessao= function(app, req, res)
     }
 
     var connection = app.config.dbConnection;
+    var PacienteDAO = new app.app.models.PacienteDAO(connection);
+    var PsicologoDAO = new app.app.models.PsicologoDAO(connection);
+    var TipoFobiaDAO = new app.app.models.TipoFobiaDAO(connection);
+    var IntervencaoDAO = new app.app.models.IntervencaoDAO(connection);
     var SessaoDAO = new app.app.models.SessaoDAO(connection);
-    SessaoDAO.insertSessao(dados);
-    res.send(dados);
+
+
+    var nome = dados.name;
+    var paciente = PacienteDAO.get({id:dados.id});
+    var psicologo = PsicologoDAO.get({crp:dados.crp});
+    var tipo_fobia = TipoFobiaDAO.get({name:dados.tipo_fobia});
+    var intervencao = IntervencaoDAO.get({name: dados.intervention});
+    var novo = {nome, paciente, psicologo, tipo_fobia, intervencao};
+
+    SessaoDAO.insertSessao(novo);
+    res.send(novo);
 }
 
 module.exports.configurar_sessao = function(app, req, res)
 {
-    res.render('admin/sessao/configurar_sessao',{validacao: {}, campos:{}});
+    res.render('admin/sessao/configurar_sessao',{validacao: {}, campos:{}, sessoes: {}});
 }

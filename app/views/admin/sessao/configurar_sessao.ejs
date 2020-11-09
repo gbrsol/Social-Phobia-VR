@@ -40,6 +40,7 @@
                         <ul class="dropdown-menu">
                             <li><a href="/forms/form_add_sessao">Criar Sessão</a></li>
                             <li><a href="/sessao/configurar_sessao">Executar Sessão</a></li>
+                            <li><a href="/simulation">Teste</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -64,27 +65,21 @@
         <% } %>
         
         <div class="container">
-            <form action="/vr/simulation" method="POST">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <form action="/forms/form_add_sessao/getAll" method="POST">
-
-                                <div class="form-group">
-                                    <label for="sessoes">Intervenção</label>
-                                    <select name="sessoes" value="<%= campos.sessoes%>" id="sessoes" class="form-control">
-                                        <% if( sessoes.length > 0 ) {%>
-                                            
-                                        <%}%>
-                                    </select>
-                                </div>
-                                <button type="submit" class="btn btn-primary">Buscar</button>
-                            </form>
-                        </div>
+            <div class="row">
+                <form action="/vr/simulation" method="POST">
+                    <div class="form-group">
+                        <label for="sessoes">Sessão</label>
+                        <select name="sessoes" value="<%= campos.sessoes%>" id="sessoes" class="form-control">
+                            <% if( sessoes.length > 0 ) {%> 
+                                <%for(var i = 0; i < sessoes.length; i++){%>
+                                    <option value="<%=sessoes[i].intervention%>"><%=sessoes[i].name%></option>
+                                <%}%>
+                            <%}%>   
+                        </select>
                     </div>
-                </div>
-                <button type="submit" class="btn btn-primary">Cadastrar</button>
-            </form>
+                    <button type="submit" class="btn btn-primary">Iniciar</button>
+                </form>
+            </div>
         </div>
     </body>
 </html>
