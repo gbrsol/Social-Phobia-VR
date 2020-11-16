@@ -8,6 +8,7 @@ async function wait(funcao)
 
 function waitOpenDoor()
 {
+  return;
   /*
   while(!opened_door)
   {
@@ -24,6 +25,7 @@ function waitOpenDoor()
 
 function waitInterventionEnd()
 {
+  return;
   while(!finished) // checar algo sobre waitevent ou algo async
   {
     setTimeout(function(){console.log('waiting for intervention end')},300);
@@ -33,6 +35,7 @@ function waitInterventionEnd()
 
 function waitExit()
 {
+  return;
   while(!exited)
   {
     console.log('waiting for user to exit');
@@ -43,6 +46,7 @@ function waitExit()
 
 function waitTransition()
 {
+  return;
   while(!transitioned)
   {
     setTimeout(() => {
@@ -54,6 +58,7 @@ function waitTransition()
 
 function waitInstruction()
 {
+  return;
   setTimeout(() => {
     //wait keydown
   }, 500);

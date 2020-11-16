@@ -71,24 +71,5 @@ var opened_door = false;
 var finished = false;
 var pressed_key = false;
 var interacted_with_npc = false;
-
-
-var intervention = {
-  "relax": "baloon",
-  "transition": "staircase",
-  "clinical": {
-    "scene": "house", 
-    "situation": "relative"
-  }
-}
-function loadFromFile(file)
-{
-  var chooser = document.querySelector('#inputfile')
-  var objectURL = window.URL.createObjectURL("../intervention/intervention.json");
-  var reader = new FileReader();
-  var text = reader.readAsText(objectURL);
-  //var json = $.getJSON("../intervention/intervention.json").done(function(json){console.log(json);json = json.replace(/[\u0000-\u0019]+/g,"");intervention = json});
-  return JSON.parse(text.replace(/[\u0000-\u0019]+/g,""));
-}
-
+var audios_transition;
 var report = [];

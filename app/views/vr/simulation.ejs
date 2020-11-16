@@ -26,9 +26,29 @@
     https://rishavjayswal.github.io/augmented-reality/
     -->
   </head>
-  <body onload="initializeAudio()">
+  <body onload="initializeSimulation(json)">
     <script>
-            
+      var json={ "relax":"baloon", 
+                  "transition": "staircase", 
+                  "clinical":{
+                      "scene": "house", 
+                      "situation": "relative"
+                      },
+                  "transition_exit": "staircase"
+                };
+      var audio_manager;
+      var sim_start_dom;
+
+      function initializeAudio(inter)
+      {
+        var avataranjo = document.querySelector('#angel');
+        audio_manager = new AudioManager(avataranjo,inter);
+      }
+      function initializeSimulation(inter)
+      {
+        sim_start_dom = document.body.innerHTML;
+        initializeAudio(inter)
+      }
       window.addEventListener('keydown',(e) =>{
 
           switch(e.keyCode)
@@ -53,6 +73,26 @@
               context.resume().then(() => {
                 console.log('Playback resumed successfully');});
               break;
+              case 79:
+                angel = document.querySelector('#angel');
+                var vis = angel.getAttribute('visible');
+                if(vis)
+                  despawnAngel();
+                else spawnAngel();
+              break;
+              case 84:
+                var setup = document.querySelector('#setup')
+                var vis = setup.style.visibility;
+                if(vis == "visible")
+                  setup.style.visibility = "hidden";
+                else setup.style.visibility = "visible"; 
+                break;
+              case 107:
+                document.querySelector('#btn_yes').emit('click');
+                break;
+              case 109:
+                document.querySelector('#btn_no').emit('click');
+                break;
           }
           //console.log(e.key.toString());
           pressed_key = true;
@@ -68,48 +108,128 @@
     <div class="enter-vr-button">
       <button id="btn" class="a-enter-vr-button"></button>
     </div>
+    embedded style= "width: 1280px; height: 720px;"
     -->
-    <input type="file" name="inputfile" id="inputfile"> 
-    <a-scene>
+    <div id="angel-text" class="container p-3 my-3 bg-dark text-white" style="z-index: 1000;position: absolute;visibility: hidden;">
+      <p id="text">Eu sou o texto do anjo</p>
+    </div>
+    
+    <div>
+      <a-scene keyboard-shortcuts="enterVR: true">
+        <div id="setup" class="container p-3 my-3 bg-dark text-white" style="z-index: 1000;position: absolute;visibility: hidden;">
+          <div class="container" color:#FFFFFF>
+            <H1 text-align:center>Intervenção Dinâmica</H1>
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+                    <div class="form-group">    
+                        <label for="relax">Relaxamento</label>
+                        <select name="relax" id="opt_relax" class="form-control">
+                            <option value="baloon">Balão</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="transition">Entrada</label>
+                        <select name="transition" id="opt_transition" class="form-control">
+                            <option value="tunnel">Túnel</option>
+                            <option value="staircase">Escadas</option>
+                        </select>
+                    </div>
+    
+                    <div class="form-group">
+                        <label for="clinical">Clínico</label>
+                        <select name="clinical" id="opt_clinical" class="form-control">
+                            <option value="house">Casa</option>
+                            <option value="shoppingmall">Shopping</option>
+                            <option value="park">Parque</option>
+                        </select>
+                    </div>
+    
+                    <div class="form-group">
+                        <label for="situation">Roteiro</label>
+                        <select name="situation" id="opt_situation" class="form-control">
+                            <option value="relative">Visita de parente</option>
+                            <option value="delivery">Entrega de pizza</option>
+                            <option value="cellphone">Ligação de celular</option>
+                        </select>
+                    </div>
+    
+                    <div class="form-group">
+                        <label for="transition_exit">Saída</label>
+                        <select name="transition_exit" id="opt_transition_exit" class="form-control">
+                            <option value="tunnel">Túnel</option>
+                            <option value="staircase">Escadas</option>
+                        </select>
+                    </div>
+                    <br/>
+                    <div class="a-enter-vr" aframe-injected=""><button class="a-enter-vr-button" aframe-injected=""></button>
+                    </div>
+                    <button onclick="loadSituationForm();" class="btn btn-primary">Iniciar</button>
+            </div>
+        </div>
+        </div>
 
         <a-assets>
           <audio id="ringtone" src="/assets/audio/house/cellphone/ringtone.mp3" preload="auto" crossorigin="anonymous"></audio>
           <audio id="knock_door" src="/assets/audio/house/relative/knock_door.mp3" preload="auto" crossorigin="anonymous"></audio>
           <audio id="angel_audio_greeting" src="/assets/audio/angel/greet.mp3" preload="auto" crossorigin="anonymous"></audio>
           <audio id="relative_positive_1" src="/assets/audio/house/relative/p_1.mp3" preload="auto" crossorigin="anonymous"></audio>
+          <audio id="relative_positive_2" src="/assets/audio/house/relative/p_2.mp3" preload="auto" crossorigin="anonymous"></audio>
+          <audio id="relative_negative_1" src="/assets/audio/house/relative/n_1.mp3" preload="auto" crossorigin="anonymous"></audio>
+          <audio id="relative_negative_2" src="/assets/audio/house/relative/n_2.mp3" preload="auto" crossorigin="anonymous"></audio>
+          <audio id="relative_question_1" src="/assets/audio/house/relative/q_1.mp3" preload="auto" crossorigin="anonymous"></audio>
+          <audio id="relative_question_2" src="/assets/audio/house/relative/q_2.mp3" preload="auto" crossorigin="anonymous"></audio>
+
+          <audio id="delivery_positive_1" src="/assets/audio/house/delivery/p_1.mp3" preload="auto" crossorigin="anonymous"></audio>
+          <audio id="delivery_positive_2" src="/assets/audio/house/delivery/p_2.mp3" preload="auto" crossorigin="anonymous"></audio>
+          <audio id="delivery_negative_1" src="/assets/audio/house/delivery/n_1.mp3" preload="auto" crossorigin="anonymous"></audio>
+          <audio id="delivery_question_1" src="/assets/audio/house/delivery/q_1.mp3" preload="auto" crossorigin="anonymous"></audio>
+          <audio id="delivery_question_2" src="/assets/audio/house/delivery/q_2.mp3" preload="auto" crossorigin="anonymous"></audio>
+          <audio id="delivery_question_3" src="/assets/audio/house/delivery/q_2.mp3" preload="auto" crossorigin="anonymous"></audio>
+
+          <audio id="cellphone_positive_1" src="/assets/audio/house/cellphone/p_1.mp3" preload="auto" crossorigin="anonymous"></audio>
+          <audio id="cellphone_positive_2" src="/assets/audio/house/cellphone/p_2.mp3" preload="auto" crossorigin="anonymous"></audio>
+          <audio id="cellphone_negative_1" src="/assets/audio/house/cellphone/n_1.mp3" preload="auto" crossorigin="anonymous"></audio>
+          <audio id="cellphone_question_1" src="/assets/audio/house/cellphone/q_1.mp3" preload="auto" crossorigin="anonymous"></audio>
+          <audio id="cellphone_question_2" src="/assets/audio/house/cellphone/q_2.mp3" preload="auto" crossorigin="anonymous"></audio>
 
           <a-image id="portal-tex" src="/assets/textures/village.jpg"></a-image>
           <a-image id="footstep" src="/assets/textures/footsteps.png"></a-image>
           <a-image id="fence" src="/assets/textures/fence.png"></a-image>
           <a-image id="street" src="/assets/textures/street.jpg"></a-image>
+          <a-image id="grass" src="/assets/textures/grass.jpg"></a-image>
+          <a-image id="sky" src="/assets/textures/newsky.jpg"></a-image>
 
           <a-asset-item id="mario" src="/assets/models/characters/doctor_mario/scene.gltf"></a-asset-item>
           <a-asset-item id="deliveryman" src="/assets/models/characters/david/david.glb"></a-asset-item>
           <a-asset-item id="relative" src="/assets/models/characters/stefani/stefani.glb"></a-asset-item>
-          <a-asset-item id="cellphone" src="/assets/models/characters/celular/scene.gltf"></a-asset-item>
+          <a-asset-item id="cellphone" src="/assets/models/characters/celular/celular_escalado.glb"></a-asset-item>
 
           <a-asset-item id="tunnel" src="/assets/models/scenes/arc_tunnel/scene.gltf"></a-asset-item>
           <a-asset-item id="staircase" src="/assets/models/scenes/staircase/StairCase_170.gltf"></a-asset-item>
-          <a-asset-item id="casa" src="/assets/models/scenes/sweet_3d/casa/casa.obj"></a-asset-item>
-          <a-asset-item id="casa-mtl" src="/assets/models/scenes/sweet_3d/casa/casa.mtl"></a-asset-item>
+          <a-asset-item id="casa" src="/assets/models/scenes/sweet_3d/casa/casa_nova.obj"></a-asset-item>
+          <a-asset-item id="casa-mtl" src="/assets/models/scenes/sweet_3d/casa/casa_nova.mtl"></a-asset-item>
           <a-asset-item id="door" src="/assets/models/scenes/sweet_3d/porta/nova_fechada.obj"></a-asset-item>
           <a-asset-item id="door-mtl" src="/assets/models/scenes/sweet_3d/porta/nova_fechada.mtl"></a-asset-item>
+          <a-asset-item id="arrow" src="/assets/models/interactives/arrow/arrow.obj"></a-asset-item>
+          <a-asset-item id="arrow-mtl" src="/assets/models/interactives/arrow/arrow.mtl"></a-asset-item>
         </a-assets>
   
         <a-entity id="player">
               <a-camera  user-height="1.6">
-                <a-cursor
-                  animation__click="property: scale; startEvents: click; easing: easeInCubic; dur: 150; from: 0.1 0.1 0.1; to: 1 1 1"
-                  animation__fusing="property: scale; startEvents: fusing; easing: easeInCubic; dur: 1500; from: 1 1 1; to: 0.1 0.1 0.1"
-                  animation__mouseleave="property: scale; startEvents: mouseleave; easing: easeInCubic; dur: 500; to: 1 1 1"
+                <a-cursor scale="0.4 0.4 0.4"
+                  animation__click="property: scale; startEvents: click; easing: easeInCubic; dur: 150; from: 0.1 0.1 0.1; to: 0.4 0.4 0.4"
+                  animation__fusing="property: scale; startEvents: fusing; easing: easeInCubic; dur: 1500; from: 0.4 0.4 0.4; to: 0.1 0.1 0.1"
+                  animation__mouseleave="property: scale; startEvents: mouseleave; easing: easeInCubic; dur: 500; to: 0.4 0.4 0.4"
                   fuse="true"
                   material="color: blue; shader: flat"
-                  position="0 0 -1"
+                  position="0 0 -0.3"
                   geometry="primitive: ring"
                   raycaster="objects: .clickable"
                   >
                 </a-cursor>
-                <a-entity id="angel"></a-entity>
+                <a-entity id="angel" visible="false"></a-entity>
               </a-camera>
         </a-entity>
   
@@ -123,9 +243,10 @@
 
         <a-entity id="transition_exit"></a-entity>
         
-        <a-sky color="#35e0f0"></a-sky>
-        <a-plane  position="0 0 0" shadow="receive:true" material="color:#00FF00" repeat="20 20" rotation="-90 0 0" scale="20 20"></a-plane>
+        <a-sky src="#sky" repeat="1 1 1"></a-sky>
+        <a-circle src="#grass" position="0 0 0" shadow="receive:true" material="color:#00FF00" repeat="20 20" rotation="-90 0 0" scale="20 20"></a-circle>
       </a-scene>
+    </div>
   </body>
   <% if(intervencao) loadInterventionFromJSON(intervencao)%>
 </html>

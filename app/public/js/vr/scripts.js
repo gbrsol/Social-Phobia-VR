@@ -1,3 +1,4 @@
+
 function loadCharacters(inter)
 {
   var relax = document.querySelector('#relax');
@@ -21,96 +22,78 @@ function loadCharacters(inter)
 function playSituation(inter)
 {
   var angel = document.querySelector('#angel');
-  //audios_to_play = getAngelAudios(inter);
-  //spawnAngel();
-  //angelGreet();
-  //playCycleAngelAudio();
+  audio_manager.play();
   var scene = inter['scene'];
   var situation = inter['situation'];
   var character = document.querySelector('#character');
-  waitTransition();
+
+  character.classList.add('clickable');
   switch(scene)
   {
     case 'house':
       switch(situation)
       {
         case 'relative':
-        //pegar pegada na frente da porta e ciclar audio nela
-        //waitOpenDoor();
-        //walkToSofa();
         character.addEventListener('click', function(){
-          if(!interacted_with_npc)
-          {
-            interacted_with_npc = !interacted_with_npc;
+            character.classList.remove('clickable');
             walkToSofa();
-          }
         })
         break;
 
         case 'cellphone':
-          cellphoneRingtone();
+          interacted_with_npc = true;
           break;
         
         case 'delivery':
-          //waitOpenDoor()
           character.addEventListener('click', function(){
-            if(!interacted_with_npc)
-            {
-              interacted_with_npc = !interacted_with_npc;
-              getMoneyGivePizza();
-            }
+            character.classList.remove('clickable');
+            getMoneyGivePizza();
           })
           break;
       }
+      break;
+    case 'shopping':
       break;
   }
   waitInterventionEnd();
   waitExit();
 }
 
+function createButtons(buttons)
+{
+  var scene = document.querySelector('a-scene')
+  for(var i = 0; i < buttons.length; i++)
+  {
+    scene.appendChild(buttons[i])
+  }
+}
+
+
 function walkToSofa()
 {
   var character = document.querySelector('#character');
   character.emit('walk');
   // position="0.25171 -40 -0.28302" rotation=""></a-entity>
-  character.setAttribute('animation__tosofa',{property:'position',to:"0.25171 -40 -0.28302",dur: 2500});
+  character.setAttribute('animation__tosofa',{property:'position',to:"0.25171 -40 -0.28302",dur: 5000});
   //character.setAttribute('animation','property', 'position', "0.25171 -40 -0.28302"); // colocar posição do sofá
   setTimeout(function(){
     character.setAttribute('rotation','0 0 0');
     character.emit('sit');
-  }, 3000);
-}
-function angelGreet()
-{
-  angel = document.querySelector('#angel');
-  angel.setAttribute('sound','src',angel_audio["greeting"].audios[0]);
-  angel.components.sound.playSound();
-}
-function getAngelAudios(inter)
-{
-  var list = new List()
-  for(audio in angel_audio[inter["scene"]].audios)
-  {
-    list.push(audio);
-  }
-  return list;
+  }, 5100);
 }
 
 function spawnAngel()
 {
   angel = document.querySelector('#angel');
-  player = document.querySelector('#player');
   angel.setAttribute('visible',true);
-  angel.setAttribute('position','-0.3 -0.3 -0.3');
-  player.removeChild(angel);
-  player.appendChild(angel);
+  document.querySelector("#angel-text").style.visibility = "visible";
 }
 
 function despawnAngel()
 {
   angel = document.querySelector('#angel');
   angel.setAttribute('visible',false);
-  angel.setAttribute('position','-0.3 -0.3 -0.3');
+  document.querySelector("#angel-text").style.visibility = "hidden";
 }
 
 function createAvatar(id)
@@ -123,14 +106,15 @@ function createAvatar(id)
 }
 function loadSituation(inter)
 {
+  //restartSimulation();
   loadRelax(inter["relax"]);
-  loadTransition(inter["transition"]);
+  loadTransition(inter);
   loadClinical(inter["clinical"]["scene"]);
   loadFootsteps(inter["clinical"]);
   loadCharacters(inter["clinical"]);
-  loadExit(inter["transition_exit"]);
+  loadExit(inter);
   loadAngel();
-  //playSituation(inter['clinical']);
+  playSituation(inter['clinical']);
 }
 function soundTest()
 {
@@ -142,8 +126,27 @@ function cellphoneRingtone()
 {
   var cell = document.querySelector('#character');
   cell.setAttribute('sound','src','#ringtone');
-  cell.components.sound.load();
   cell.components.sound.playSound();
+}
+
+function responseYes()
+{
+  audio_manager.nextPositive();
+  var character = document.querySelector('#character');
+  if(audio_manager.checkPreCharacter())
+    character.emit('click');
+}
+
+function responseNo()
+{
+  audio_manager.nextNegative();
+  var door = document.querySelector('#house-door')
+  door.emit('click')
+}
+
+function responseRepeat()
+{
+  audio_manager.play();
 }
 
 function loadRelax(relax)
@@ -158,58 +161,65 @@ function loadRelax(relax)
   }
 }
 
-function createFootsteps(positions)
+function createFootsteps(positions, rotations)
 {
   var id = 1;
   var scene = document.querySelector('a-scene');
-  /* exemplo casa
-        <a-plane id="foot-1" src="#footstep" goto rotation="-90 0 0" position="6.85164 -39.9465 -0.76414" material="" geometry="" class="clickable"></a-plane>
-        <a-plane id="foot-2" src="#footstep" goto rotation="-90 0 0" position="2.6907 -39.9465 -0.76414" material="" geometry="" class="clickable"></a-plane>
-        <a-plane id="foot-3" src="#footstep" goto rotation="-90 0 0" position="2.6907 -39.9465 3.51758" material="" geometry="" class="clickable"></a-plane>
-        <a-plane id="foot-4" src="#footstep" goto rotation="-90 0 0" position="-3.02575 -39.9465 3.51758" material="" geometry="" class="clickable"></a-plane>
-        <a-plane id="foot-5" src="#footstep" goto rotation="-90 0 0" position="-3.02575 -39.9465 -0.82681" material="" geometry="" class="clickable"></a-plane>
-        <a-plane id="foot-6" src="#footstep" goto rotation="-90 0 0" position="1.70708 -39.9465 1.22194" material="" geometry="" class="clickable"></a-plane> 
-
-  */ 
   for(var i = 0; i < positions.length; i++)
   {
     var el = document.createElement('a-plane');
     el.setAttribute('id','footsteps-'+ (i+1));
-    el.setAttribute('rotation','-90 0 0');
+    el.setAttribute('rotation',{x:-90, y:rotations[i]});
     el.setAttribute('material',{src:'#footstep'});
     el.setAttribute('blink-teleportation','');
     el.setAttribute('position',positions[i]);
     el.classList.add('clickable');
     scene.appendChild(el);
   } 
-  
-  return;
-  positions.forEach(function(){
-    var el = document.createElement('a-plane');
-    el.setAttribute('id','footsteps-'+id);
-    el.setAttribute('rotation','-90 0 0');
-    el.setAttribute('src','#footstep');
-    el.setAttribute('position',this[i].toString());
-    el.classList.add('clickable');
-    scene.appendChild(el);
-  });
+}
+
+function tocaCampainha()
+{
+  var scene = document.querySelector('a-scene')
+  scene.setAttribute('sound','src','#knock_door')
+  scene.components.sound.playSound();
 }
 
 function loadFootsteps(inter)
 {
   var scene = inter['scene'];
+  var rotations = [];
   var positions = [];
+  var positions_chao = [ "0.027 0.01 -1.3", "4.6 0.01 -2.9", "14, 0.01 -4.3"] // primeiro canto, depois balão
+  var rotacao_chao = ["0", "-90","-90"]
+
+  var positions_escada = ["9.2 0.01 -4.3", "15.62 -2.6 -4.2", "15.62 -2.6 -6.4"]
+  var rotacao_escada = ["-90","-90","0"]
+
+  var positions_tunel = []
+  var rotacao_tunel = []
+
+  var pos = []
+  var rot = []
+
+  positions = positions.concat(positions_chao);
+  positions = positions.concat(positions_escada);
+  rotations = rotations.concat(rotacao_chao);
+  rotations = rotations.concat(rotacao_escada);
   switch(scene)
   { 
     case 'house':
-      var positions = ["6.85164 -39.9465 -0.76414", 
-                       "2.6907 -39.9465 -0.76414",
-                       "2.6907 -39.9465 3.51758",
-                       "-3.02575 -39.9465 3.51758",
-                       "-3.02575 -39.9465 -0.82681",
-                       "1.70708 -39.9465 1.22194", // até aqui é casa
-                       "9.2 0.01 -4.3",//chao
-                      ];
+      pos = ["6.85164 -39.9465 -0.76414", 
+      "2.6907 -39.9465 -0.76414",
+      "2.6907 -39.9465 3.51758",
+      "-3.02575 -39.9465 3.51758",
+      "-3.02575 -39.9465 -0.82681",
+      "3.05 -39.9465 7.581", 
+      "5.886 -39.9465 7.581",
+      "10.33 -37.3 7.581"]
+      rot = ["90","90","180","0","0", "180","-90", "-90"]
+      positions = positions.concat(pos)
+      rotations = rotations.concat(rot);
       break;
 
     case 'shoppingmall':
@@ -218,13 +228,15 @@ function loadFootsteps(inter)
     case 'park':
       break;
   }
-  createFootsteps(positions);
+  console.log(positions);
+  createFootsteps(positions, rotations);
 }
 
 function blinkTransition()
 {
   var anchor = document.querySelector('#user-anchor');
   var player = document.querySelector('#player');
+
   //var pos = new THREE.Vector3();
   //anchor.object3D.getWorldPosition(pos);
   //console.log(pos)
@@ -236,10 +248,37 @@ function blinkTransition()
   setTimeout(() => {
     transitioned = true;
   }, 500);
+  audios_transition();
 }
 
-function loadTransition(trans)
+function getTransitionAudio(clin)
 {
+  var scene = clin["scene"];
+  var situation = clin["situation"];
+  switch(scene)
+  {
+    case 'house':
+      switch(situation)
+      {
+        case 'delivery':
+          audios_transition = function(){tocaCampainha(); spawnAngel();audio_manager.waitAnswer()}
+          break;
+        case 'relative':
+          audios_transition = function(){tocaCampainha(); spawnAngel();audio_manager.waitAnswer()}
+          break;
+        case 'cellphone':
+          audios_transition = function(){
+            cellphoneRingtone(); setTimeout(()=>{audio_manager.waitAnswer();spawnAngel()}, 500);
+          }
+          break;
+      }
+      break;
+  }
+}
+
+function loadTransition(inter)
+{
+  var trans = inter["transition"];
   var el = document.querySelector('#transition');
   var ent = document.createElement('a-entity');
   var plane = document.createElement('a-plane');
@@ -247,22 +286,31 @@ function loadTransition(trans)
   plane.setAttribute('src','#portal');
   plane.setAttribute('scale','2 2');
   plane.setAttribute('material','color','#FF0000');
-  plane.addEventListener('click',function(){blinkTransition();});
+  getTransitionAudio(inter["clinical"]);
+  plane.addEventListener('click',function(){
+    blinkTransition();//inter["clinical"]);
+  });
   plane.classList.add('clickable');
   switch(trans)
   {
     case 'tunnel':
       el.setAttribute('model','scene','#tunnel');
-      el.setAttribute('model','scale','0.01 0.01 0.03');
+      el.setAttribute('scale','0.01 0.01 0.03');
       // check position later
-      plane.setAttribute('position','0 1.5 -4');
+      el.setAttribute('rotation', "0 -90 0")
+      el.setAttribute('position',"13 0 -4.3")
+
+      plane.setAttribute('position','-0.5 137.7 -108.3');
+      plane.setAttribute('width',"150")
+      plane.setAttribute('height',"128")
       //el.appendChild(ent);
       break;
 
     case 'staircase':
+
       el.setAttribute('model','scene','#staircase');
-      el.setAttribute('scale','0.1 0.1 0.1');
-      el.setAttribute('position',"12.80991 -7.45887 -6");
+      el.setAttribute('scale','0.07 0.07 0.07');
+      el.setAttribute('position',"12 -5.3 -5.6");
       el.setAttribute('rotation','0 90 0');
       plane.setAttribute('scale','30 30 30');
       plane.setAttribute('position','13 17 -8.5');
@@ -295,18 +343,14 @@ function loadClinical(clin)
     case 'house':
       el.setAttribute('model',{ext:"obj",scene:'#casa',material:'#casa-mtl'});
       el.setAttribute('scale','0.01 0.01 0.01'); // pra outra 0.03
-      el.setAttribute('position', '-7 -40 -4');//el.setAttribute('position',"-101.95343 0.1 15.91853")
-      //anchor.setAttribute('position',"1505 1.6 245");
-      anchor.setAttribute('position',"7.60976 -39.9 -0.93902");//<a-entity id="user-anchor" position="7.60976 -39.18216 -0.93902"></a-entity>
-      //<a-entity door="" position="-3.39121 -40 0.4202" scale="0.01 0.01 0.01" animation__click="property: rotation; startEvents: click; dur: 2000; to: 0 80 0" event-set__click="opened_door = !opened_door;"><a-entity position="0 0 -0.65"><a-entity obj-model="obj: ../assets/models/scenes/sweet_3d/porta/porta_fechada.obj; mtl: ../assets/models/scenes/sweet_3d/porta/porta_fechada.mtl"></a-entity></a-entity></a-entity>
-      //<a-entity id="house-door" door="" position="3.05381 -39 5.11742" class="clickable" obj-model="obj: ../assets/models/scenes/sweet_3d/porta/untitled.obj; mtl: ../assets/models/scenes/sweet_3d/porta/untitled.mtl" scale="0.01 0.01 0.01" model="ext: obj; scene: #door; material: #door-mtl"></a-entity>
-      //<a-cylinder material="" geometry="" position="2.5057 -39.05853 5.13933" scale="0.01 0.77 0.01"></a-cylinder>
+      el.setAttribute('position', '-7 -40 -4');
+      anchor.setAttribute('position',"7.60976 -39.9 -0.93902");
       createDoor("2.5057 -39.05853 5.13933");
 
       //criar background
       var planeBedroom = document.createElement('a-plane');
       planeBedroom.setAttribute('position','6.7 -39 -3')
-      planeBedroom.setAttribute('scale','2 1.270 1');
+      planeBedroom.setAttribute('scale','2.5 1.270 1');
       planeBedroom.setAttribute('src','#fence');
 
       var planeLR = document.createElement('a-plane');
@@ -321,96 +365,114 @@ function loadClinical(clin)
   }
 }
 
-function loadExit(trans)
+function loadExit(inter)
 {
   var el = document.querySelector('#transition_exit');
   var ent = document.createElement('a-entity');
   var plane = document.createElement('a-plane');
+  var trans = inter["transition_exit"]
+  var scene = inter["clinical"]["scene"]
   plane.setAttribute('id','trans-exit-anchor');
   plane.setAttribute('src','#portal');
   plane.setAttribute('scale','2 2');
   plane.setAttribute('material','color','#FF0000');
-  //plane.addEventListener('click',function(){blinkTransition();});
   plane.classList.add('clickable');
   plane.addEventListener('click',function(){sessionReport()})
-  switch(trans)
+  switch(scene)
   {
-    case 'tunnel':
-      el.setAttribute('model','scene','#tunnel');
-      el.setAttribute('model','scale','0.01 0.01 0.03');
-      // check position later
-      plane.setAttribute('position','0 1.5 -4');
-      //el.appendChild(ent);
-      el.setAttribute('position','0 -40 0');
+    case 'house':
+      switch(trans)
+      {
+        case 'tunnel':
+        case 'staircase':/*
+          el.setAttribute('model','scene','#staircase');
+          el.setAttribute('scale','0.07 0.07 0.07');
+          el.setAttribute('position',"4.2 -45.36 7.1");
+          el.setAttribute('rotation','0 0 0');
+          plane.setAttribute('scale','30 30 30');
+          plane.setAttribute('position','13 17 -8.5');*/
+          var arrow = document.createElement('a-entity')
+          arrow.setAttribute('model',{ext:"obj", scene: "#arrow", material: "#arrow-mtl"})
+          arrow.setAttribute('position', '7.5 -38.74106 7.66096')
+          arrow.setAttribute('rotation', '-130 90 0')
+          arrow.setAttribute('scale', '0.2 0.2 0.2')
+          arrow.classList.add('clickable')
+          arrow.addEventListener('click', ()=>{
+            document.querySelector('#footsteps-14').emit('click')
+            arrow.classList.remove('clickable')
+          })
+          document.querySelector('a-scene').appendChild(arrow)
+          
+          el.setAttribute('position','12.51598 -36.24594 7.72012')
+          plane.setAttribute('rotation',"0 -90 0")
+          break;    
+      }
       break;
-
-    case 'staircase':
-      el.setAttribute('model','scene','#staircase');
-      el.setAttribute('scale','0.07 0.07 0.07');
-      el.setAttribute('position',"4.2 -45.36 7.1");
-      el.setAttribute('rotation','0 0 0');
-      plane.setAttribute('scale','30 30 30');
-      plane.setAttribute('position','13 17 -8.5');
-      break;    
   }
-  el.appendChild(plane);
+  el.appendChild(plane)
 }
 
 function loadAngel()
 {
   var angel = document.querySelector('#angel');
   angel.setAttribute('model','scene','#mario');
-  angel.setAttribute('position',"1.28716 0.29517 -1.00378");
+  angel.setAttribute('position',"0.55772 -0.01885 -0.47872");
   angel.setAttribute('rotation','10 -30 0');
   angel.setAttribute('scale','0.02 0.02 0.02');
   angel.setAttribute('angel-avatar','');
   //<a-entity id="angel" sound="src: [object Object]" gltf-model="/assets/models/characters/doctor_mario/scene.gltf" scale="0.02 0.02 0.02" model="scene: #mario" position="1.28716 0.29517 -1.00378" angel-avatar="" rotation="10 -29.999999999999996 0"></a-entity>
+  spawnAngel()
 }
 
 function getPhone()
 {
-  if(!phone_in_hand)
-  {
     var scene = document.querySelector('a-scene')
     var cell = document.querySelector('#character')
     var cam = document.querySelector('a-camera')
-    var ent = document.querySelector('a-entity')//cell.cloneNode()
-    
-    scene.removeChild(cell)
-    cam.appendChild(ent)
+    var ent = document.createElement('a-entity')//cell.cloneNode()
 
-    ent.setAttribute('position','0.10215 -0.06117 -0.02942');
-    ent.setAttribute('rotation','-120 -80 0');
-    ent.setAttribute('model','scene','#cellphone');
-    ent.setAttribute('scale', '0.01 0.01 0.01');
+    var plane = document.createElement('a-plane');
+    plane.setAttribute('id', 'plane_cellphone')
+    plane.addEventListener('click', ()=>{putDownPhone(); })
+    plane.setAttribute('width', 0.2)
+    plane.setAttribute('height', 0.2)
+    plane.setAttribute('position', '7.3 -39.2 0.55')
+    plane.setAttribute('rotation','-90 0 0')
+    plane.classList.add('clickable')
+
+    scene.appendChild(plane)
+    scene.removeChild(cell)
+    
+    createPhone(ent);
+    ent.setAttribute('position','0.3 -0.01 -0.175')
+    ent.setAttribute('rotation','-90 120 180')
+    cam.appendChild(ent)
     report.push(new Date().getTime()+": O usuário pegou o celular");
-  }
 }
 
 function putDownPhone()
 {
-  if(phone_in_hand)
-  {
-    phone_in_hand = false; 
     //retirar celular do usuário e voltar pra mesa
-    var character = document.querySelector('#character');
+    var cell = document.querySelector('#character');
     var player = document.querySelector('a-camera');
     var scene = document.querySelector('a-scene');
+    var ent = document.createElement('a-entity');
+    createPhone(ent);
+    ent.setAttribute('position',"7.41339 -39.22504 0.55851");
+
     player.removeChild(character);
-    character = document.createElement('a-entity');
-    createPhone(character);
-    character.setAttribute('position',"7.41339 -39.22504 0.55851");
-    character.setAttribute('scale','0.01 0.01 0.01');
-    scene.appendChild(character);
+    var plane = document.querySelector('plane_cellphone')
+    scene.appendChild(ent);
+    scene.removeChild(plane)
+
     report.push(new Date().getTime() + ": O usuário colocou o celular na mesa");
-  }
 }
 
 function createPhone(element)
 {
   element.setAttribute('id','character');
   element.setAttribute('model','scene','#cellphone');
-  element.setAttribute('scale','0.01 0.01 0.01')
+  //element.setAttribute('scale','0.01 0.01 0.01')
   element.setAttribute('rotation','180 180 0');
   element.classList.add('clickable');
   element.addEventListener('click',function(){
@@ -444,7 +506,6 @@ function setupCharacter(inter)
           character.setAttribute('model','scene','#deliveryman');
           character.setAttribute('position',"3.16801 -40 5.6");
           character.setAttribute('rotation',"0 180 0");
-          character.setAttribute('scale','0.5 0.5 0.5');
           break;
       }
       break;
@@ -474,16 +535,37 @@ function setupCharacter(inter)
 
 function getMoneyGivePizza()
 {
-  var character = document.querySelector('#deliveryman');
-  waitInstruction(); // espera psicólogo falar, em instrução pega o "dinheiro"
-  character.emit('Give')
+  var character = document.querySelector('#character');
+  //waitInstruction(); // espera psicólogo falar, em instrução pega o "dinheiro"
+  character.emit('greet');
+  setTimeout(()=>{character.emit('give')}, 500);
+  character.emit('stop');
   setTimeout(() => {
-    character.emit('Idle')
-  }, 200);
+    character.emit('idle')
+  }, 2000);
 }
+
+
 
 function sessionReport()
 {
   //enviar para o relatório uma string
   app.app.controllers.admin.insert_relatorio(report);
+}
+
+function loadSituationForm()
+{
+  var relax = document.getElementById('opt_relax').value.toString();
+  var ent = document.getElementById('opt_transition').value.toString();
+  var clin = document.getElementById('opt_clinical').value.toString();
+  var sit = document.getElementById('opt_situation').value.toString();
+  var exit = document.getElementById('opt_transition_exit').value.toString();
+  var json = JSON.parse('{ "relax": "'+relax + '", "transition": "'+ ent + '", "clinical":{ "scene": "'+ clin + '", "situation": "'+sit + '"}, "transition_exit": "'+ exit + '"}')
+  loadSituation(json);
+  initializeSimulation(json);
+}
+
+function restartSimulation()
+{
+  document.body.innerHTML = sim_start_dom;
 }

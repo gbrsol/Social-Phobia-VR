@@ -32,6 +32,9 @@ AFRAME.registerComponent('animated-avatar',{
     el.addEventListener('give',function (){
       el.setAttribute('animation-mixer','clip','Give')
     });
+    el.addEventListener('greet',function (){
+      el.setAttribute('animation-mixer','clip','Greet')
+    });
   }
 });
 
@@ -86,7 +89,11 @@ AFRAME.registerComponent('angel-avatar',{
   {
     var el = this.el;
     var data = this.data;
+    var pos = el.getAttribute('position')
+    var rot = el.getAttribute('rotation')
     el.setAttribute('sound','');
+    el.setAttribute('animation__position',{property:'position',to:{y:pos.y+0.05},loop:true, dir:"alternate", dur: 2000, easing:"easeInOutCirc" })
+    el.setAttribute('animation__rotation',{property:'rotation',to:{y:pos.y-0.05},loop:true, dir:"alternate", dur: 4000, easing:"linear" })
   }
 });
 
@@ -111,6 +118,7 @@ AFRAME.registerComponent('door',{
    var parent = this.el;
    var el = document.createElement('a-entity')//this.el;
    var data = this.data;
+
    el.classList.add('clickable');
    el.setAttribute('model',{ext:'obj',scene:'#door',material:'#door-mtl'});
    //el.setAttribute('scale','0.01 0.01 0.01')
@@ -122,9 +130,24 @@ AFRAME.registerComponent('door',{
     else 
       parent.setAttribute('animation__click',{property:"rotation",startEvents:"click",dur:"500",to:"0 -80 0"});//  el.setAttribute('model',{ext:'obj',scene:'#door-open',material:'#door-open-mtl'});
     opened_door = !opened_door;
+
+    if(!interacted_with_npc)
+    {
+      interacted_with_npc = !interacted_with_npc;
+      audio_manager.waitAnswer();//ask4Interaction();
+      el.emit('character_interaction');
+    }
    });
-   
+
+   el.addEventListener('character_interaction', function(){
+     //var character = document.querySelector('#character');
+     setTimeout(() => {
+      //character.emit('click');
+     }, 300);
+   });
+
    parent.appendChild(el);
+
   }
 });
 

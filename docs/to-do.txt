@@ -1,2 +1,15 @@
+ - Imersão de cena, áudios, textos e objetos virtuais
+ 
+ - Opções de mapas de json
+
+ - Réplica para outros ambientes 
+
+ - Disparo cross-device
+
+ - Relatório de intervenção
+
  - Preencher comboboxes com dados do mongodb
- - arrumar eventos de porta
+
+ - Mudar dados da combobox com JQuery
+
+ - Arrumar transição para mudar camera ativa
