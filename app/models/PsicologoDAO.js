@@ -18,6 +18,7 @@ PsicologoDAO.prototype.get = function(psi){
         mongoclient.collection("psicologo", function(err, collection){
             collection.find({crp:psi.crp}).toArray(function(err, result){
                 ret = result;
+                //res.render('/forms/form_add_sessao', {psicologo: ret})
             });
             mongoclient.close();
         });

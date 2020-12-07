@@ -14,6 +14,7 @@
     <script src="https://rawgit.com/mayognaise/aframe-gif-component/master/dist/aframe-gif-component.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://unpkg.com/aframe-look-at-component@0.5.1/dist/aframe-look-at-component.min.js"></script>
+    <script src="https://unpkg.com/aframe-text-geometry-component@^0.5.0/dist/aframe-text-geometry-component.min.js"></script> 
 
     <!-- <script type="text/javascript" src="../intervention/intervention.JSON"></script>-->
     <script src="/js/vr/AudioManager.js"></script>
@@ -22,32 +23,73 @@
     <script src="/js/vr/scripts.js"></script>
     <script src="/js/vr/keydown.js"></script>
     <script src="/js/vr/async.js"></script>
+    
+    <link rel="stylesheet" href="/css/style.css">
     <!-- LINK ÚTIL PARA DEPOIS 
     https://rishavjayswal.github.io/augmented-reality/
     -->
   </head>
-  <body onload="initializeSimulation(json)">
+  <body onload="startTButton()">
     <script>
-      var json={ "relax":"baloon", 
-                  "transition": "staircase", 
-                  "clinical":{
-                      "scene": "house", 
-                      "situation": "relative"
-                      },
-                  "transition_exit": "staircase"
-                };
+      var time;
+      var fases = ["relax" , "transition", "clinical" , "transition_exit"]
+      var fase_atual = fases[0]
+      var intervention_aux = { "relax":"baloon", 
+        "transition": "staircase", 
+        "clinical":{
+            "scene": "house", 
+            "situation": "relative"
+            },
+        "transition_exit": "staircase"
+        };
+      
       var audio_manager;
       var sim_start_dom;
+      
+      function setupButtons()
+      {
+        document.getElementById('btn_next_phase').addEventListener('click', function() {  nextPhase()})
+        document.getElementById('btn_open_exit').addEventListener('click', function(){ spawnExitPortal();})
+        document.getElementById('btn_answer_yes').addEventListener('click', function(){document.querySelector('#btn-yes').emit('click')})
+        document.getElementById('btn_answer_no').addEventListener('click', function(){ document.querySelector('#btn-no').emit('click')})
+      }
 
+      function nextPhase()
+      {
+        loadFootsteps(intervention_aux);
+      }
       function initializeAudio(inter)
       {
         var avataranjo = document.querySelector('#angel');
         audio_manager = new AudioManager(avataranjo,inter);
       }
+      function initOculusControls()
+      {
+        document.querySelector('#right-hand').addEventListener('triggerdown', function(){
+
+        })
+        document.querySelector('#left-hand').addEventListener('triggerdown', function(){
+          
+        })
+      }
       function initializeSimulation(inter)
       {
         sim_start_dom = document.body.innerHTML;
+        initOculusControls();
         initializeAudio(inter)
+        setupButtons()
+        //loadSituation(inter)
+        intervention_aux = inter;
+        //loadSituationForm();
+      }
+      function startTButton()
+      {
+        document.getElementById('btn_start').addEventListener('click',function() {  var setup = document.querySelector('#setup')
+                var vis = setup.style.visibility;
+                if(vis == "visible")
+                  setup.style.visibility = "hidden";
+                else setup.style.visibility = "visible"; 
+              })
       }
       window.addEventListener('keydown',(e) =>{
 
@@ -102,20 +144,31 @@
       });
   </script>
     <!--
-      <div id="angel-text" class="container p-3 mb-2 bg-dark text-white">
-      Bom dia, hoje realizaremos uma consulta
-    </div>
-    <div class="enter-vr-button">
-      <button id="btn" class="a-enter-vr-button"></button>
-    </div>
     embedded style= "width: 1280px; height: 720px;"
     -->
-    <div id="angel-text" class="container p-3 my-3 bg-dark text-white" style="z-index: 1000;position: absolute;visibility: hidden;">
-      <p id="text">Eu sou o texto do anjo</p>
+
+    <div id="menu" class="container p-3 my-3 bg-dark text-white " style="z-index: 1000; position:absolute;bottom:0; right: 0; width: 50%">
+      
+      <div class="row">
+        <div class="col-md-12">
+            <div class="btn-group">
+              <button id="btn_start">INICIAR SIMULAÇÃO</button>
+              <button id="btn_open_exit">SAÍDA</button>
+              <button id="btn_next_phase">PRÓXIMA FASE</button>
+              <button id="btn_answer_yes">RESPOSTA SIM</button><button id="btn_answer_no">RESPOSTA NÃO</button>
+              <button id="btn_next_phase">FINALIZAR SIMULAÇÃO</button>
+              <button id="start_vr" class="enter-vr-btn">
+              </button>
+            </div>
+        </div>
+      </div>
     </div>
-    
-    <div>
-      <a-scene keyboard-shortcuts="enterVR: true">
+    <div id="simulation">
+      <a-scene keyboard-shortcuts="enterVR: true" vr-mode-ui="enterVRButton: #start_vr">
+        <div id="angel-text" class="container p-3 my-3 bg-dark text-white" style="z-index: 1000;position: absolute;visibility: hidden;">
+          <p id="text">Eu sou o texto do anjo</p>
+        </div>
+
         <div id="setup" class="container p-3 my-3 bg-dark text-white" style="z-index: 1000;position: absolute;visibility: hidden;">
           <div class="container" color:#FFFFFF>
             <H1 text-align:center>Intervenção Dinâmica</H1>
@@ -124,14 +177,14 @@
             <div class="col-md-12">
                     <div class="form-group">    
                         <label for="relax">Relaxamento</label>
-                        <select name="relax" id="opt_relax" class="form-control">
+                        <select name="relax" id="opt_relax" class="form-control" value="<%= intervencao.relax%>">
                             <option value="baloon">Balão</option>
                         </select>
                     </div>
                     
                     <div class="form-group">
                         <label for="transition">Entrada</label>
-                        <select name="transition" id="opt_transition" class="form-control">
+                        <select name="transition" id="opt_transition" value="<%= intervencao.transition%>" class="form-control" onchange="document.querySelector('#opt_transition_exit').value = document.querySelector('#opt_transition').value;">
                             <option value="tunnel">Túnel</option>
                             <option value="staircase">Escadas</option>
                         </select>
@@ -139,35 +192,50 @@
     
                     <div class="form-group">
                         <label for="clinical">Clínico</label>
-                        <select name="clinical" id="opt_clinical" class="form-control">
+                        <select name="clinical" id="opt_clinical" value="<%= intervencao.clinical.scene%>" class="form-control">
                             <option value="house">Casa</option>
                             <option value="shoppingmall">Shopping</option>
                             <option value="park">Parque</option>
+                            <option value="office">Escritório</option>
                         </select>
                     </div>
     
                     <div class="form-group">
                         <label for="situation">Roteiro</label>
-                        <select name="situation" id="opt_situation" class="form-control">
+                        <select name="situation" id="opt_situation" value="<%= intervencao.clinical.situation%>" class="form-control">
                             <option value="relative">Visita de parente</option>
                             <option value="delivery">Entrega de pizza</option>
                             <option value="cellphone">Ligação de celular</option>
+                            <option value="presentation">Apresentação(assistir)</option>
+                            <option value="presenter">Apresentação(apresentar)</option>
                         </select>
                     </div>
     
                     <div class="form-group">
                         <label for="transition_exit">Saída</label>
-                        <select name="transition_exit" id="opt_transition_exit" class="form-control">
+                        <select name="transition_exit" id="opt_transition_exit" value="<%= intervencao.transition%>" class="form-control" disabled>
                             <option value="tunnel">Túnel</option>
                             <option value="staircase">Escadas</option>
                         </select>
                     </div>
-                    <br/>
-                    <div class="a-enter-vr" aframe-injected=""><button class="a-enter-vr-button" aframe-injected=""></button>
+                    <!--<div class="form-group">
+                      <label for="transition_exit">Tempo(em segundos)</label><br/>
+                      <input id="time" min="0" type="number" name="time" id="opt_time" value="0"></input>
                     </div>
-                    <button onclick="loadSituationForm();" class="btn btn-primary">Iniciar</button>
+                    <br/>-->
+                    </div>
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    &nbsp;&nbsp;&nbsp;&nbsp;<button onclick="loadSituationForm()">Iniciar</button>
             </div>
         </div>
+
+        <div id="form-final" style="visibility: hidden;">
+          <form action="/simulation/report">
+            <textarea id="text-report"></textarea>
+            <input type="submit" id="btn-finalizar">
+          </form>
         </div>
 
         <a-assets>
@@ -200,25 +268,41 @@
           <a-image id="street" src="/assets/textures/street.jpg"></a-image>
           <a-image id="grass" src="/assets/textures/grass.jpg"></a-image>
           <a-image id="sky" src="/assets/textures/newsky.jpg"></a-image>
+          <a-image id="render-relax" src="/assets/textures/render_relax.png"></a-image>
+          <a-image id="render-house" src="/assets/textures/render_house.png"></a-image>
+          <a-image id="yes-tex" src="/assets/textures/yes.jpg"></a-image>
+          <a-image id="no-tex" src="/assets/textures/no.png"></a-image>
 
           <a-asset-item id="mario" src="/assets/models/characters/doctor_mario/scene.gltf"></a-asset-item>
           <a-asset-item id="deliveryman" src="/assets/models/characters/david/david.glb"></a-asset-item>
           <a-asset-item id="relative" src="/assets/models/characters/stefani/stefani.glb"></a-asset-item>
           <a-asset-item id="cellphone" src="/assets/models/characters/celular/celular_escalado.glb"></a-asset-item>
+          <a-asset-item id="coworker-1" src="/assets/models/characters/regina/regina.glb"></a-asset-item>
+          <a-asset-item id="coworker-2" src="/assets/models/characters/joe/joe.glb"></a-asset-item>
+          <a-asset-item id="coworker-3" src="/assets/models/characters/josh/josh.glb"></a-asset-item>
+          <a-asset-item id="coworker-4" src="/assets/models/characters/tyler/tyler.glb"></a-asset-item>
+
 
           <a-asset-item id="tunnel" src="/assets/models/scenes/arc_tunnel/scene.gltf"></a-asset-item>
           <a-asset-item id="staircase" src="/assets/models/scenes/staircase/StairCase_170.gltf"></a-asset-item>
-          <a-asset-item id="casa" src="/assets/models/scenes/sweet_3d/casa/casa_nova.obj"></a-asset-item>
-          <a-asset-item id="casa-mtl" src="/assets/models/scenes/sweet_3d/casa/casa_nova.mtl"></a-asset-item>
+          <a-asset-item id="casa" src="/assets/models/scenes/sweet_3d/casa/casa_final.obj"></a-asset-item>
+          <a-asset-item id="casa-mtl" src="/assets/models/scenes/sweet_3d/casa/casa_final.mtl"></a-asset-item>
+          <a-asset-item id="office" src="/assets/models/scenes/sweet_3d/escritorio/escritorio.obj"></a-asset-item>
+          <a-asset-item id="office-mtl" src="/assets/models/scenes/sweet_3d/escritorio/escritorio.mtl"></a-asset-item>
           <a-asset-item id="door" src="/assets/models/scenes/sweet_3d/porta/nova_fechada.obj"></a-asset-item>
           <a-asset-item id="door-mtl" src="/assets/models/scenes/sweet_3d/porta/nova_fechada.mtl"></a-asset-item>
           <a-asset-item id="arrow" src="/assets/models/interactives/arrow/arrow.obj"></a-asset-item>
           <a-asset-item id="arrow-mtl" src="/assets/models/interactives/arrow/arrow.mtl"></a-asset-item>
+          <a-asset-item id="box" src="/assets/models/interactives/box/scene.gltf"></a-asset-item>
         </a-assets>
   
         <a-entity id="player">
+          <a-entity id="left-hand"if-no-vr-headset="visible: false" laser-controls="hand: left" oculus-touch-controls="hand: left" raycaster="objects: .clickable; far: 5"></a-entity>
+          <a-entity id="right-hand" if-no-vr-headset="visible: false" laser-controls="hand: right" oculus-touch-controls="hand: right" raycaster="objects: .clickable; far: 5"></a-entity>
               <a-camera  user-height="1.6">
-                <a-cursor scale="0.4 0.4 0.4"
+                
+                <a-cursor if-no-vr-headset="visible: false; disabled: true;"
+                  scale="0.4 0.4 0.4"
                   animation__click="property: scale; startEvents: click; easing: easeInCubic; dur: 150; from: 0.1 0.1 0.1; to: 0.4 0.4 0.4"
                   animation__fusing="property: scale; startEvents: fusing; easing: easeInCubic; dur: 1500; from: 0.4 0.4 0.4; to: 0.1 0.1 0.1"
                   animation__mouseleave="property: scale; startEvents: mouseleave; easing: easeInCubic; dur: 500; to: 0.4 0.4 0.4"
@@ -226,13 +310,15 @@
                   material="color: blue; shader: flat"
                   position="0 0 -0.3"
                   geometry="primitive: ring"
-                  raycaster="objects: .clickable"
+                  raycaster="objects: .clickable; far: 5;"
                   >
                 </a-cursor>
                 <a-entity id="angel" visible="false"></a-entity>
+                <a-sphere id="btn-yes-player" visible="false" radius="0.03" color="#09eb45" position="0.2 -0.1 -0.4"></a-sphere>
+                <a-sphere id="btn-no-player" visible="false" radius="0.03" color="#eb0909"  position="0.5 -0.1 -0.4"></a-sphere>
               </a-camera>
         </a-entity>
-  
+        
         <a-entity id="relax"></a-entity>
         
         <a-entity id="transition" position="3 0 0"></a-entity>
@@ -242,11 +328,17 @@
         <a-entity id="clinical" scale="0.01 0.01 0.01" position="0 0.1 -4"></a-entity>
 
         <a-entity id="transition_exit"></a-entity>
-        
+
+        <a-sphere id="btn-yes" visible="false" radius="0.1" color="#09eb45" class="clickable" src="#yes-tex" repeat="2" rotation="0 90 0" scale="1 1 0.5">
+          <!--<a-entity text-geometry="value: 'SIM';height: 0.1;size:0.1" position="0 0 1"></a-entity>-->
+        </a-sphere>
+        <a-sphere id="btn-no" visible="false" radius="0.1" color="#eb0909" class="clickable" src="#no-tex" repeat="2" rotation="0 90 0" scale="1 1 0.5">
+          <!-- <a-entity text-geometry="value: 'NÃO';height: 0.1;size:0.1" position="0 0 1"></a-entity>-->
+        </a-sphere>
         <a-sky src="#sky" repeat="1 1 1"></a-sky>
         <a-circle src="#grass" position="0 0 0" shadow="receive:true" material="color:#00FF00" repeat="20 20" rotation="-90 0 0" scale="20 20"></a-circle>
       </a-scene>
+      
     </div>
   </body>
-  <% if(intervencao) loadInterventionFromJSON(intervencao)%>
 </html>

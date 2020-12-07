@@ -8,7 +8,7 @@ function AudioManager(element, inter)
     this.nIndex = 0;
     this.qIndex = 0;
     var angel_audio = {
-        "greeting": [ 
+        "greeting": [
           {
             "situation": "none",
             "audios": { 
@@ -78,7 +78,25 @@ function AudioManager(element, inter)
                           assinatura, mas no tempo que ele precisa para entregar. Gostaria de continuar?"},]
             }
           }
-        ] //, espaço para novas situações
+        ], //, espaço para novas situações
+        'office': [
+          {
+            'situation': 'presentation',
+            'audios': {
+              'positive': [],
+              'negative': [],
+              'question': []
+            }
+          },
+          {
+            'situation': 'presenter',
+            'audios': {
+              'positive': [],
+              'negative': [],
+              'question': []
+            }
+          }
+        ]
       };
       var audio_list;
       var i;
@@ -89,7 +107,8 @@ function AudioManager(element, inter)
       this.negatives = audio_list["negative"]
       this.questions = audio_list["question"]
       this.audio = angel_audio["greeting"][0]["audios"]["greeting"][0];
-      this.el.setAttribute('sound','src',this.audio.id);
+      //if(this.el != null)
+      //this.el.setAttribute('sound','src',this.audio.id);
       console.log('Audio Manager started')
 }
 
@@ -197,75 +216,61 @@ AudioManager.prototype.checkPrePreCharacter = function(){
 }
 function removeButtons()
 {
-  var scene = document.querySelector('a-scene')
-  if(scene.contains(document.querySelector('#btn_yes')) && scene.contains(document.querySelector('#btn_no')))
-  {
-    scene.removeChild(document.querySelector('#btn_yes'))
-    scene.removeChild(document.querySelector('#btn_no'))
-  }
+  document.querySelector('#btn-yes').setAttribute('visible',false)
+  document.querySelector('#btn-no').setAttribute('visible',false)
 }
-function getButtons()
+
+function removeAngel()
 {
-  var scene = document.querySelector('a-scene')
-  var player = document.querySelector('#player');
-  var pos = player.getAttribute('position')
-  removeButtons();
-  var buttonYes = document.createElement('a-sphere');
-  var buttonNo = document.createElement('a-sphere');
-  var buttonRepeat = document.createElement('a-sphere');
-
-  buttonYes.setAttribute('id','btn_yes')
-  buttonNo.setAttribute('id','btn_no');
-  buttonYes.setAttribute('color', '#09eb45');
-  buttonNo.setAttribute('color','#eb0909')
-  buttonRepeat.setAttribute('color','#f0e10e');
-  buttonYes.setAttribute('radius', '0.1');
-  buttonNo.setAttribute('radius', '0.1');
-  //buttonRepeat.setAttribute('radius', '0.1');
-  buttonYes.classList.add('clickable');
-  buttonNo.classList.add('clickable');
-
-  buttonYes.setAttribute('position',{x: pos.x+0.3, y: pos.y+1.3, z: pos.z-0.4})
-  buttonNo.setAttribute('position',{x: pos.x+0.3, y: pos.y+1.3, z: pos.z-0.1})
-
- // buttonYes.addEventListener('click', ()=> { responseYes();scene.removeChild(buttonYes);scene.removeChild(buttonNo)})
- // buttonNo.addEventListener('click',() => {responseNo(); scene.removeChild(buttonNo);scene.removeChild(buttonYes)})
- // buttonRepeat.addEventListener('click', () => {responseRepeat()})
-  return [buttonYes,buttonNo]
+  document.querySelector('#angel').setAttribute('visible', false)
+  document.querySelector('#angel-text').style.visibility = false;
 }
 
+function spawnAngel()
+{
+  document.querySelector('#angel').setAttribute('visible', true)
+  document.querySelector('#angel-text').style.visibility = true;
+}
+
+
+function newButton(type)
+{
+  removeButtons()
+  switch(type)
+  {
+    case 'positive':
+      audio_manager.nextPositive();
+      break;
+    case 'negative':
+      audio_manager.nextNegative();
+      break;
+  }
+  
+  var dur = document.querySelector(this.audio).duration
+  setTimeout(()=>{
+    audio_manager.waitAnswer(); 
+    if(this.checkPrePreCharacter())
+    {
+      document.querySelector('#house-door').classList.add('clickable')
+    }
+  }, dur+300)
+}
 AudioManager.prototype.waitAnswer = function()
 {
   // spawnar caixas botões
   this.nextQuestion();
+  spawnAngel()
   var player = document.querySelector('#player');
   var player_pos = player.getAttribute('position');
   var dist = 0.3
-  var buttons = getButtons();
   var scene = document.querySelector('a-scene');
-  var yes = buttons[0], no = buttons[1]
+  var yes = document.querySelector('#btn-yes')
+  var no = document.querySelector('#btn-no')
   yes.addEventListener('click',function(){
-    removeButtons()
-    audio_manager.nextPositive();
-    var dur = document.querySelector(this.audio).duration
-    setTimeout(()=>{
-      audio_manager.waitAnswer(); 
-      if(this.checkPrePreCharacter())
-      {
-        document.querySelector('#house-door').classList.add('clickable')
-      } 
-    }, dur+300)
-  })
+    newButton('positive')
+  });
   no.addEventListener('click',function(){
-    removeButtons()
-    audio_manager.nextNegative();
-    var dur = document.querySelector(this.audio).duration
-    setTimeout(()=>{audio_manager.waitAnswer();
-      if(this.checkPreCharacter())
-      {
-        document.querySelector('#house-door').classList.add('clickable')
-      } 
-    }, dur+300)
+    newButton('negative')
   })
   
   if(this.checkPreCharacter())
@@ -273,11 +278,13 @@ AudioManager.prototype.waitAnswer = function()
     yes.addEventListener('click',function(){
       document.querySelector('#character').emit('click');
       removeButtons();
+      removeAngel();
     })
     no.addEventListener('click', function(){
       document.querySelector('#house-door').emit('click')
-      removeButtons()
+      removeButtons();
+      removeAngel();
     })
   }
-  createButtons([yes, no])
+  switchButtonsToScene()
 }

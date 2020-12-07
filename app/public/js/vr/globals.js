@@ -72,4 +72,4 @@ var finished = false;
 var pressed_key = false;
 var interacted_with_npc = false;
 var audios_transition;
-var report = [];
+var footstep_quant = 0;

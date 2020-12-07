@@ -41,6 +41,7 @@
                             <li><a href="/forms/form_add_sessao">Criar Sessão</a></li>
                             <li><a href="/sessao/configurar_sessao">Executar Sessão</a></li>
                             <li><a href="/simulation">Teste</a></li>
+                            <li><a href="/sessao/iniciar_intervencao_nova">Criar e testar nova intervencao</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -66,7 +67,7 @@
         
         <div class="container">
             <div class="row">
-                <form action="/vr/simulation" method="POST">
+                <form action="/simulation" method="GET">
                     <div class="form-group">
                         <label for="sessoes">Sessão</label>
                         <select name="sessoes" value="<%= campos.sessoes%>" id="sessoes" class="form-control">
@@ -74,7 +75,7 @@
                                 <%for(var i = 0; i < sessoes.length; i++){%>
                                     <option value="<%=sessoes[i].intervention%>"><%=sessoes[i].name%></option>
                                 <%}%>
-                            <%}%>   
+                            <%}%>
                         </select>
                     </div>
                     <button type="submit" class="btn btn-primary">Iniciar</button>

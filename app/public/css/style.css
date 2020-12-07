@@ -24,3 +24,47 @@ input:focus {
 	background-color: #554f4f;
 	padding: 20px;
   }
+
+button{
+	background-color: #4CAF50; /* Green background */
+	border: 1px solid green; /* Green border */
+	color: white; /* White text */
+	padding: 5px 15px; /* Some padding */
+	cursor: pointer; /* Pointer/hand icon */
+	width: 50%; /* Set a width if needed */
+	display: block; /* Make the buttons appear below each other */
+}
+
+  .btn-group button {
+	background-color: #3e8e41;
+	 /* Green background */
+	border: 1px solid green; /* Green border */
+	color: white; /* White text */
+	padding: 5px 15px; /* Some padding */
+	cursor: pointer; /* Pointer/hand icon */
+	width: 50%; /* Set a width if needed */
+	display: block; /* Make the buttons appear below each other */
+  }
+  
+  .btn-group button:not(:last-child) {
+	border-bottom: none; /* Prevent double borders */
+  }
+  
+  /* Add a background color on hover */
+  .btn-group button:hover {
+	background-color: #4CAF50;
+  }
+
+.enter-vr-btn{
+	background: url(/images/vr.jpg); 
+	height: 80px; 
+	width: 80%;
+	background-size: 120px 100px;
+	background-repeat: no-repeat;
+	background-position: center center;
+	display: block;
+	opacity: 0.5;
+}
+.enter-vr-btn:hover{
+	opacity: 1.0;
+}

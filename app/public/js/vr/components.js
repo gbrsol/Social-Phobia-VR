@@ -1,3 +1,5 @@
+//const { Double } = require("mongodb");
+
 AFRAME.registerComponent('baloon', {
   init: function(){
     var el = this.el;
@@ -19,17 +21,22 @@ AFRAME.registerComponent('animated-avatar',{
     var data = this.data;
     el.addEventListener('idle',function (){
       el.setAttribute('animation-mixer','clip','Idle')
+      console.log('idle')
     });
     el.addEventListener('walk',function (){
       el.setAttribute('animation-mixer','clip','Walk')
+      console.log('walk')
     });
     el.addEventListener('sit',function (){
       el.setAttribute('animation-mixer','clip','Sit')
+      console.log('sit')
     });
     el.addEventListener('talk',function (){
       el.setAttribute('animation-mixer','clip','Talk')
+      console.log('talk')
     });
     el.addEventListener('give',function (){
+      console.log('give')
       el.setAttribute('animation-mixer','clip','Give')
     });
     el.addEventListener('greet',function (){
@@ -114,39 +121,38 @@ AFRAME.registerComponent('footstep',{
 });
 
 AFRAME.registerComponent('door',{
+  schema: {
+    rot: {type: 'number', default: 80},
+    open: {type: 'boolean', default: false}
+  },
   init:function(){
    var parent = this.el;
    var el = document.createElement('a-entity')//this.el;
    var data = this.data;
 
-   el.classList.add('clickable');
+   el.setAttribute('scale',' 1.1 1 1.1')
    el.setAttribute('model',{ext:'obj',scene:'#door',material:'#door-mtl'});
-   //el.setAttribute('scale','0.01 0.01 0.01')
    el.setAttribute('position','56 5 0');
-   el.addEventListener('click',function(){
+   
+   parent.addEventListener('click',function(){
      console.log('the door was clicked');
-    if(opened_door)
-      parent.setAttribute('animation__click',{property:"rotation",startEvents:"click",dur:"500",to:"0 0 0"});//  el.setAttribute('model',{ext:'obj',scene:'#door',material:'#door-mtl'});
-    else 
-      parent.setAttribute('animation__click',{property:"rotation",startEvents:"click",dur:"500",to:"0 -80 0"});//  el.setAttribute('model',{ext:'obj',scene:'#door-open',material:'#door-open-mtl'});
-    opened_door = !opened_door;
-
+     if(data.open)
+     {
+       parent.setAttribute('animation__click',{property:"rotation",dur:"500",to:"0 0 0"});
+     }
+     else 
+     {
+       parent.setAttribute('animation__click',{property:"rotation",dur:"500",to:{x:0, y:90, z:0}});
+     }
+     data.open = !data.open;
     if(!interacted_with_npc)
     {
       interacted_with_npc = !interacted_with_npc;
       audio_manager.waitAnswer();//ask4Interaction();
-      el.emit('character_interaction');
     }
    });
 
-   el.addEventListener('character_interaction', function(){
-     //var character = document.querySelector('#character');
-     setTimeout(() => {
-      //character.emit('click');
-     }, 300);
-   });
-
-   parent.appendChild(el);
+   setTimeout(()=>{parent.appendChild(el);}, 500)
 
   }
 });

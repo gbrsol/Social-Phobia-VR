@@ -40,4 +40,10 @@ module.exports = function(app)
     app.get('/sessao/configurar_sessao', function(req, res){
         app.app.controllers.admin.configurar_sessao(app, req, res);
     }); 
+    app.get('/sessao/iniciar_intervencao_nova', function(req, res){
+        app.app.controllers.admin.iniciar_intervencao_nova(app, req, res);
+    }); 
+    app.get('/sessao/iniciar_intervencao_nova/iniciar_salvar', function(req, res){
+        app.app.controllers.admin.iniciar_salvar_nova_intervencao(app, req, res);
+    }); 
 }

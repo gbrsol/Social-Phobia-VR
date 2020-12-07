@@ -1,6 +1,6 @@
 <html>
     <head>
-        <title>Criar Sessão</title>
+        <title>Criar Intervenção</title>
 
         <!-- JQuery -->
 		<script src="/js/jquery-2.2.1.js"></script>
@@ -15,7 +15,7 @@
     </head>
     <body>
         <div class="container" color:#FFFFFF>
-            <H1 text-align:center>Formulário de Sessão</H1>
+            <H1 text-align:center>Criação de nova intervenção junto de teste</H1>
         </div>
         <nav class="navbar navbar-inverse">
             <div class="container-fluid">
@@ -41,6 +41,7 @@
                             <li><a href="/forms/form_add_sessao">Criar Sessão</a></li>
                             <li><a href="/sessao/configurar_sessao">Executar Sessão</a></li>
                             <li><a href="/simulation">Teste</a></li>
+                            <li><a href="/sessao/iniciar_intervencao_nova">Criar e testar nova intervencao</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -67,34 +68,59 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
-                    <form action="/forms/form_add_sessao/salvar" method="POST">
+                    <form action="/sessao/iniciar_intervencao_nova/iniciar_salvar" method="GET">
                         <div class="form-group">
-                            <label for="name">Nome de Sessão</label>
-                            <input type="text" id="name" name="name" placeholder="Digite um nome para a sessão...." value="<%= campos.name%>"class="form-control"/>
+                            <label for="name">Nome</label>
+                            <input type="text" id="name" name="name" value="<%= campos.nome%>" placeholder="Nome da intervenção" class="form-control"/>
                         </div>
-
+                        
                         <div class="form-group">
-                            <label for="crp">CRP</label>
-                            <input type="number" id="crp" name="crp" placeholder="Digite o CRP do psicólogo cadastrado" value="<%= campos.crp%>"class="form-control"/>
+                            <label for="description">Descrição</label>
+                            <input type="text" id="description" name="description" placeholder="Descrição da intervenção" value="<%= campos.descricao%>"class="form-control"/>
                         </div>
-
+                        
+                        <div class="form-group">    
+                            <label for="relax">Relaxamento</label>
+                            <select name="relax" value="<%= campos.relax%>" id="relax" class="form-control">
+                                <option value="baloon">Balão</option>
+                            </select>
+                        </div>
+                        
                         <div class="form-group">
-                            <label for="id">ID do Paciente</label>
-                            <input type="number" id="id" name="id" placeholder="Digite o ID Hospitalar do paciente cadastrado" value="<%= campos.id%>"class="form-control"/>
+                            <label for="transition">Entrada</label>
+                            <select name="transition" value="<%= campos.transition%>" id="transition" class="form-control">
+                                <option value="tunnel">Túnel</option>
+                                <option value="stairs">Escadas</option>
+                            </select>
                         </div>
     
                         <div class="form-group">
-                            <label for="intervencao">Intervenção</label>
-                            <select name="intervencao" value="" id="intervencao" class="form-control">
-                                <% if( intervencoes ) {%>
-                                    <%for( var i = 0; i < intervencoes.length; i++){%>
-                                        <option value="<%=intervencoes[i].name%>"><%=intervencoes[i].name%></option>
-                                    <%}%>
-                                <%}%>
+                            <label for="clinical">Clínico</label>
+                            <select name="clinical" value="<%= campos.clinical%>" id="clinical" class="form-control">
+                                <option value="house">Casa</option>
+                                <option value="shoppingmall">Shopping</option>
+                                <option value="park">Parque</option>
+                            </select>
+                        </div>
+    
+                        <div class="form-group">
+                            <label for="situation">Roteiro</label>
+                            <select name="situation" id="situation" class="form-control">
+                                <option value="relative">Visita de parente</option>
+                                <option value="deliveryman">Entrega de pizza</option>
+                                <option value="cellphone">Ligação de celular</option>
                             </select>
                         </div>
 
-                        <button type="submit" class="btn btn-primary">Cadastrar</button>
+                        <div class="form-group">
+                            <label for="transition_exit">Saída</label>
+                            <select name="transition_exit" value="<%= campos.transition_exit%>" id="transition_exit" class="form-control">
+                                <option value="tunnel">Túnel</option>
+                                <option value="stairs">Escadas</option>
+                            </select>
+                        </div>
+    
+                        <button type="submit" class="btn btn-primary">Cadastrar e iniciar</button>
                     </form>
                 </div>
             </div>

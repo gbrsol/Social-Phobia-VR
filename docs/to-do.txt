@@ -1,15 +1,27 @@
- - Imersão de cena, áudios, textos e objetos virtuais
- 
- - Opções de mapas de json
+To do: 
+    
+    Prioridade
+    - Criar rotação dinâmica de porta
+    - Criar situação de escritório(apresentador, plateia)
+    - Criar situação 3
 
- - Réplica para outros ambientes 
+    - posicionar npcs, pegadas, e saída
 
- - Disparo cross-device
+    Problemas do A-Frame
+    - Raycaster
+    - Rotação de câmera no Javascript
 
- - Relatório de intervenção
 
- - Preencher comboboxes com dados do mongodb
 
- - Mudar dados da combobox com JQuery
+    Não tão prioritário
+    - Disparo cross-device
+    - Relatório de intervenção
+    - Preencher comboboxes com dados do mongodb
 
- - Arrumar transição para mudar camera ativa
+
+    Refactors:
+    - Arrumar transição para mudar camera ativa
+    - Opções de mapas de json
+    - Mudar dados da combobox com JQuery
+
+<%if(intervencao) {loadSituationForm()} else {console.log('Não carrregou a cena');}%>
