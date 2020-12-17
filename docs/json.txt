@@ -1,0 +1,9 @@
+'{
+  "relax": "'+ intervencoes[i].intervention.relax+ '",
+  "transition": "'+ intervencoes[i].intervention.transition + '",
+  "clinical": {
+    "scene": "'+ intervencoes[i].intervention.scene + '",
+    "situation": "'+ intervencoes[i].intervention.situation + '"
+  },
+  "transition_exit": "'+ intervencoes[i].intervention.transition_exit + '"
+}'
