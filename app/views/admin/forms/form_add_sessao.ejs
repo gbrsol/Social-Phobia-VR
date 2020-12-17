@@ -40,10 +40,13 @@
                         <ul class="dropdown-menu">
                             <li><a href="/forms/form_add_sessao">Criar Sessão</a></li>
                             <li><a href="/sessao/configurar_sessao">Executar Sessão</a></li>
-                            <li><a href="/simulation">Teste</a></li>
+                            <li><a href="/simulation">Simulação</a></li>
                         </ul>
                     </li>
                 </ul>
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="/help">Help</a>
+                </div>
             </div>
         </nav>
 
@@ -72,6 +75,10 @@
                             <label for="name">Nome de Sessão</label>
                             <input type="text" id="name" name="name" placeholder="Digite um nome para a sessão...." value="<%= campos.name%>"class="form-control"/>
                         </div>
+                        <div class="form-group">
+                            <label for="description">Descrição de sessão</label>
+                            <input type="text" id="description" name="description" placeholder="Digite a descrição da sessão" value="<%= campos.description%>"class="form-control"/>
+                        </div>
 
                         <div class="form-group">
                             <label for="crp">CRP</label>
@@ -83,12 +90,15 @@
                             <input type="number" id="id" name="id" placeholder="Digite o ID Hospitalar do paciente cadastrado" value="<%= campos.id%>"class="form-control"/>
                         </div>
     
+                        
+
                         <div class="form-group">
                             <label for="intervencao">Intervenção</label>
                             <select name="intervencao" value="" id="intervencao" class="form-control">
-                                <% if( intervencoes ) {%>
+                                <% if( intervencoes ) { console.log(intervencoes);%>
                                     <%for( var i = 0; i < intervencoes.length; i++){%>
-                                        <option value="<%=intervencoes[i].name%>"><%=intervencoes[i].name%></option>
+                                        <%var inter = '{"relax": "'+ intervencoes[i].intervention.relax+ '","transition": "'+ intervencoes[i].intervention.transition + '","clinical": {"scene": "'+ intervencoes[i].intervention.clinical.scene + '","situation": "'+ intervencoes[i].intervention.clinical.situation + '"},"transition_exit": "'+ intervencoes[i].intervention.transition_exit + '"}';%>
+                                        <option value="<%=inter%>"><%=intervencoes[i].name%></option>
                                     <%}%>
                                 <%}%>
                             </select>

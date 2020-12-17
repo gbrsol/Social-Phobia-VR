@@ -40,11 +40,13 @@
                         <ul class="dropdown-menu">
                             <li><a href="/forms/form_add_sessao">Criar Sessão</a></li>
                             <li><a href="/sessao/configurar_sessao">Executar Sessão</a></li>
-                            <li><a href="/simulation">Teste</a></li>
-                            <li><a href="/sessao/iniciar_intervencao_nova">Criar e testar nova intervencao</a></li>
+                            <li><a href="/simulation">Simulação</a></li>
                         </ul>
                     </li>
                 </ul>
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="/help">Help</a>
+                </div>
             </div>
         </nav>
 
@@ -70,10 +72,10 @@
                 <form action="/simulation" method="GET">
                     <div class="form-group">
                         <label for="sessoes">Sessão</label>
-                        <select name="sessoes" value="<%= campos.sessoes%>" id="sessoes" class="form-control">
+                        <select id="session_intervention" name="sessoes" id="sessoes" class="form-control">
                             <% if( sessoes.length > 0 ) {%> 
                                 <%for(var i = 0; i < sessoes.length; i++){%>
-                                    <option value="<%=sessoes[i].intervention%>"><%=sessoes[i].name%></option>
+                                    <option value="<%=sessoes[i].intervencao%>"><%=sessoes[i].nome%></option>
                                 <%}%>
                             <%}%>
                         </select>

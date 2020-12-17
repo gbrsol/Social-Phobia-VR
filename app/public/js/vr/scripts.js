@@ -147,10 +147,14 @@ function switchButtonsToScene()
   no.setAttribute('visible',true)
 }
 
+function startPlayer()
+{
+  document.querySelector('#player').setAttribute('position','0.016 0 -1.87');
+}
 function loadSituation(inter)
 {
   //restartSimulation();
-  document.querySelector('#player').setAttribute('position','0.016 0 -1.87')
+  startPlayer()
   loadRelax(inter["relax"]);
   loadTransition(inter);
   loadClinical(inter["clinical"]["scene"]);
@@ -160,6 +164,7 @@ function loadSituation(inter)
   loadRender(inter)
   loadRaycaster();
   playSituation(inter['clinical']);
+  //document.querySelector('#vr_toggle').style.visibility='hidden';
 }
 function soundTest()
 {
@@ -236,8 +241,8 @@ function loadFootsteps(inter)
   var scene = inter["clinical"]["scene"];
   var rotations = [];
   var positions = [];
-  var positions_relax = [ "0.027 0.01 -1.3", "1.73134 0.01 -2.04948", "4.6 0.01 -2.9", "14, 0.01 -4.3"] // primeiro canto, depois balão
-  var rotacao_relax = ["0", "-90", "-90","-90"]
+  var positions_relax = [ "0.027 0.01 -1.3", "1.73134 0.01 -2.04948", "4.6 0.01 -2.9", "14, 0.01 -4.3","12, 0.01 -4.3", "6.805 0.010 -3.401"] // primeiro canto, depois balão
+  var rotacao_relax = ["0", "-90", "-90","-90","-90 ", "-90"]
 
   var positions_transition = ["9.2 0.01 -4.3", "15.62 -2.6 -4.2", "15.62 -2.6 -6.4"]
   var rotacao_transition = ["-90","-90","0"]
@@ -268,8 +273,8 @@ function loadFootsteps(inter)
       break;
 
     case 'office':
-      pos = ['-0.62 -39.9465 -1.885', '4.174 -39.9465 -1.688']
-      rot = ['0', '90']
+      pos = ['-0.76 -39.9465 -1.885', '3.941 -39.9465 -2.2', "3,673 -39.9465 1.438 ", "2.197 -39.9465 0.559"]
+      rot = ['0', '90', '-180', '-90']
       positions = positions.concat(pos)
       rotations = rotations.concat(rot);
       break;
@@ -280,7 +285,17 @@ function loadFootsteps(inter)
       break;
   }
   console.log(positions);
-  createFootsteps(positions, rotations);
+  //if(!vr_activated)
+    createFootsteps(positions, rotations);
+  /*else 
+  {
+    var left = document.querySelector('#left-hand')
+    var right = document.querySelector('#right-hand')
+    left.setAttribute('teleport-controls',{cameraRig:'#player', teleportOrigin:'#head', startEvents:'teleportstart',endEvents:'teleportend'})
+    left.setAttribute('input-listen',"");
+    right.setAttribute('teleport-controls',{cameraRig:'#player', teleportOrigin:'#head', startEvents:'teleportstart',endEvents:'teleportend'})
+    right.setAttribute('input-listen',"");
+  }*/
 }
 
 function blinkTransition()
@@ -305,6 +320,10 @@ function blinkTransition()
   audios_transition();
 }
 
+function teste()
+{
+  console.log('Teste muito bom')
+}
 function getTransitionAudio(clin)
 {
   var scene = clin["scene"];
@@ -329,9 +348,24 @@ function getTransitionAudio(clin)
             cellphoneRingtone(); setTimeout(()=>{audio_manager.waitAnswer();spawnAngel()}, 500);
           }
           break;
+        case 'office':
+            audios_transition = function(){
+              setTimeout(()=>{audio_manager.waitAnswer();spawnAngel()}, 500);
+            }
+            break;
+        case 'shoppingmall':
+            audios_transition = function(){
+              document.querySelector('a-scene').setAttribute('sound','src','#shopping-sfx'); setTimeout(()=>{audio_manager.waitAnswer();spawnAngel()}, 500);
+            }
+            break;
       }
       break;
   }
+}
+
+function setupRender(inter) // coloca render na transição
+{
+  //document.querySelector('#trans-anchor').setAttribute('src','#render-'+inter["clinical"]);
 }
 
 function loadTransition(inter)
@@ -361,7 +395,6 @@ function loadTransition(inter)
       plane.setAttribute('position','-0.5 137.7 -108.3');
       plane.setAttribute('width',"150")
       plane.setAttribute('height',"128")
-      plane.setAttribute('src','#render-house')
       //el.appendChild(ent);
       break;
 
@@ -375,6 +408,8 @@ function loadTransition(inter)
       plane.setAttribute('position','13 17 -8.5');
       break;
   }
+  setupRender(inter)
+
   el.appendChild(plane);
 }
 
@@ -388,7 +423,10 @@ function createDoor(id,pos, rot, isClickable)
   door.setAttribute('position',pos)
   
   if(isClickable)
-    door.classList.add('clickable')
+    {
+      door.classList.add('clickable')
+      
+    }
 
   setTimeout(()=>{scene.appendChild(door);}, 500)
 }
@@ -421,11 +459,11 @@ function spawnExitPortal()
   //player.setAttribute('rotation', '-1.7 365.662 0')
   //player.position.y +=1.6
   var text = makeText("EXIT")
-  var exit = document.querySelector('#exit-door')
-  exit.emit('click')
+  document.querySelector('#exit-door').classList.add('clickable')
+  setTimeout(()=>{document.querySelector('#exit-door').emit('click')}, 500)
   scene.appendChild(text);
+  //if(!vr_activated)
   createFootsteps(["4.644 -39.9 3.128" , "7.462 -39.9 3.128", "9.7 -39.9 3.128"], ["-90", "-90", "-90"]);
-  scene.appendChild(portal)
 }
 
 function createExitDoor(pos)
@@ -446,6 +484,7 @@ function scaleDoor(id)
     case 'house':
       document.querySelector('#'+id+'-door').getChildren()[0].setAttribute('scale',{x: 1.6});
       document.querySelector('#'+id+'-door').classList.add('clickable')
+      document.querySelector('#'+id+'-door').getChildren()[0].classList.add('clickable')
       break;
     case 'exit':
       document.querySelector('#exit-door').setAttribute('rotation',{y:90})
@@ -454,7 +493,8 @@ function scaleDoor(id)
       break;
     case 'office':
       document.querySelector('#'+id+'-door').getChildren()[0].setAttribute('scale',{x: 1.6});
-      document.querySelector('#'+id+'-door').classList.add('clickable')
+      document.querySelector('#'+id+'-door').classList.add('clickable') 
+      document.querySelector('#'+id+'-door').getChildren()[0].classList.add('clickable')
       break;
   }
 }
@@ -502,13 +542,31 @@ function loadClinical(clin)
     case 'office':
       el.setAttribute('model',{ext:"obj",scene:'#office',material:'#office-mtl'});
       el.setAttribute('scale','0.01 0.01 0.01'); // pra outra 0.03
-      el.setAttribute('position', '-7 -40 -4');
-      anchor.setAttribute('position',"4.04 -39.9 -0.9");
-      createDoor('office',"-0.975 -39.081 -2.354", 170, true);
+      el.setAttribute('position', '-1.62 -40 -4');
+      anchor.setAttribute('position',"3.5 -39.9 -2.3");
+      createDoor('office',"-0.975 -39.081 -3.021", -170, true);
+
+      var office_p = document.createElement('a-plane')
+      office_p.setAttribute('src','#office-tex')
+      office_p.setAttribute('position','1.586 -39 -3.303')
+      office_p.setAttribute('width', 2.5)
+      office_p.setAttribute('height',2)
+
+      var build_p = document.createElement('a-plane')
+      build_p.setAttribute('src','#building-tex')
+      build_p.setAttribute('position','1.370 -39 2.442')
+      build_p.setAttribute('width', 1.5)
+      build_p.setAttribute('height', 1.5)
+      build_p.setAttribute('rotation', '0 180 0')
+      scene.appendChild(office_p)
+      scene.appendChild(build_p)
       setTimeout(() => {
         scaleDoor('office')
-        
       }, 3000);
+      break;
+    case 'shoppingmall':
+      el.setAttribute('model',{scene: '#shoppingmall'})
+      el.setAttribute('position','-21.2 -40 43.8')
       break;
   }
 }
@@ -527,7 +585,9 @@ function loadExit(inter)
   plane.classList.add('clickable');
   plane.addEventListener('click',function(){
     //sessionReport(); 
-    document.querySelector('#player').setAttribute('position','0 0 0')})
+    //document.dispatchEvent(new KeyboardEvent('keypress',{'key':'escape'}));
+    document.querySelector('#player').setAttribute('position','0.016 0 -1.87')
+  })
   switch(scene)
   {
     case 'house':
@@ -576,7 +636,26 @@ function loadExit(inter)
           case 'tunnel':
           el.setAttribute('model','scene','#tunnel');
           el.setAttribute('scale','0.01 0.01 0.025');
-          el.setAttribute('position',"-0.8 -39.9 -5.878");
+          el.setAttribute('position',"-1.6 -39.9 -6.585");
+          plane.setAttribute('position','-0.5 137.7 -108.3');
+          plane.setAttribute('width',"150")
+          plane.setAttribute('height',"128")
+          plane.setAttribute('src','#render-relax')
+          break;
+        case 'staircase':
+          
+          el.setAttribute('position','12.51598 -36.24594 7.72012')
+          plane.setAttribute('rotation',"0 -90 0")
+          break;
+        }
+        break;
+      case 'shoppingmall':
+        switch(trans)
+        {
+          case 'tunnel':
+          el.setAttribute('model','scene','#tunnel');
+          el.setAttribute('scale','0.01 0.01 0.025');
+          el.setAttribute('position',"-1.6 -39.9 -6.585");
           plane.setAttribute('position','-0.5 137.7 -108.3');
           plane.setAttribute('width',"150")
           plane.setAttribute('height',"128")
@@ -801,6 +880,8 @@ function loadSituationForm()
   loadSituation(json);
   //startInterventionTimer(time);
   document.querySelector('#setup').style.visibility = "hidden"
+  if(vr_activated)
+    document.querySelector('a-scene').removeChild(document.querySelector('a-cursor'))
 }
 
 function restartSimulation()

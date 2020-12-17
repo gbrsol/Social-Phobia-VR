@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-br">
   <head>
-    <title>Home</title>
+    <title>Simulação</title>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
@@ -15,21 +15,24 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://unpkg.com/aframe-look-at-component@0.5.1/dist/aframe-look-at-component.min.js"></script>
     <script src="https://unpkg.com/aframe-text-geometry-component@^0.5.0/dist/aframe-text-geometry-component.min.js"></script> 
+    <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+    <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
 
-    <!-- <script type="text/javascript" src="../intervention/intervention.JSON"></script>-->
     <script src="/js/vr/AudioManager.js"></script>
     <script src="/js/vr/globals.js"></script>
     <script src="/js/vr/components.js"></script>
     <script src="/js/vr/scripts.js"></script>
     <script src="/js/vr/keydown.js"></script>
     <script src="/js/vr/async.js"></script>
+    <% if(intervencao) console.log('Existe intervencao')%>
+    <% if(helper) console.log('Existe helper')%>
     
     <link rel="stylesheet" href="/css/style.css">
     <!-- LINK ÚTIL PARA DEPOIS 
     https://rishavjayswal.github.io/augmented-reality/
     -->
   </head>
-  <body onload="startTButton()">
+  <body onload="startTButton();">
     <script>
       var time;
       var fases = ["relax" , "transition", "clinical" , "transition_exit"]
@@ -45,6 +48,7 @@
       
       var audio_manager;
       var sim_start_dom;
+      var raycastered = false;
       
       function setupButtons()
       {
@@ -65,11 +69,14 @@
       }
       function initOculusControls()
       {
-        document.querySelector('#right-hand').addEventListener('triggerdown', function(){
-
+        var right=  document.querySelector('#right-hand');
+        var left = document.querySelector('#left-hand');
+        right.addEventListener('triggerdown', function(){
+            console.log('Right hand trigger')
+            //if(right.raycaster.components.raycaster.getIntersection())
         })
-        document.querySelector('#left-hand').addEventListener('triggerdown', function(){
-          
+        left.addEventListener('triggerdown', function(){
+          console.log('Left hand trigger')
         })
       }
       function initializeSimulation(inter)
@@ -82,6 +89,15 @@
         intervention_aux = inter;
         //loadSituationForm();
       }
+      function switchDevice(){
+        var cursor = document.querySelector('a-cursor')
+        var scene = document.querySelector('a-scene')
+        vr_activated = !vr_activated;
+        if(!vr_activated)
+        cursor.setAttribute('visible',false)
+        else 
+          cursor.setAttribute('visible',true)
+      }
       function startTButton()
       {
         document.getElementById('btn_start').addEventListener('click',function() {  var setup = document.querySelector('#setup')
@@ -90,6 +106,17 @@
                   setup.style.visibility = "hidden";
                 else setup.style.visibility = "visible"; 
               })
+        document.getElementById('btn_open_exit').disabled = false;
+        document.getElementById('btn_answer_yes').disabled = false;
+        document.getElementById('btn_answer_no').disabled = false;
+        document.getElementById('btn_next_phase').disabled = false;
+      }
+      function enableButtons()
+      {
+        document.getElementById('btn_open_exit').disabled = true;
+        document.getElementById('btn_answer_yes').disabled = true;
+        document.getElementById('btn_answer_no').disabled = true;
+        document.getElementById('btn_next_phase').disabled = true;
       }
       window.addEventListener('keydown',(e) =>{
 
@@ -146,8 +173,9 @@
     <!--
     embedded style= "width: 1280px; height: 720px;"
     -->
+    
 
-    <div id="menu" class="container p-3 my-3 bg-dark text-white " style="z-index: 1000; position:absolute;bottom:0; right: 0; width: 50%">
+    <div id="menu" class="container p-3 my-3 bg-dark text-white " style="z-index: 1000; position:absolute;bottom:0; right: 0; width: 70%">
       
       <div class="row">
         <div class="col-md-12">
@@ -156,13 +184,13 @@
               <button id="btn_open_exit">SAÍDA</button>
               <button id="btn_next_phase">PRÓXIMA FASE</button>
               <button id="btn_answer_yes">RESPOSTA SIM</button><button id="btn_answer_no">RESPOSTA NÃO</button>
-              <button id="btn_next_phase">FINALIZAR SIMULAÇÃO</button>
-              <button id="start_vr" class="enter-vr-btn">
-              </button>
+              <button id="btn_end_simulation" onclick="location.href='/'">FINALIZAR SIMULAÇÃO></button>
+              <button id="start_vr" class="enter-vr-btn"></button>
             </div>
         </div>
       </div>
     </div>
+     
     <div id="simulation">
       <a-scene keyboard-shortcuts="enterVR: true" vr-mode-ui="enterVRButton: #start_vr">
         <div id="angel-text" class="container p-3 my-3 bg-dark text-white" style="z-index: 1000;position: absolute;visibility: hidden;">
@@ -171,40 +199,37 @@
 
         <div id="setup" class="container p-3 my-3 bg-dark text-white" style="z-index: 1000;position: absolute;visibility: hidden;">
           <div class="container" color:#FFFFFF>
-            <H1 text-align:center>Intervenção Dinâmica</H1>
+            <H1 text-align:center>Iniciar Intervenção Dinâmica</H1>
           </div>
           <div class="row">
             <div class="col-md-12">
                     <div class="form-group">    
                         <label for="relax">Relaxamento</label>
-                        <select name="relax" id="opt_relax" class="form-control" value="<%= intervencao.relax%>">
+                        <select name="relax" id="opt_relax" class="form-control" >
                             <option value="baloon">Balão</option>
                         </select>
                     </div>
                     
                     <div class="form-group">
                         <label for="transition">Entrada</label>
-                        <select name="transition" id="opt_transition" value="<%= intervencao.transition%>" class="form-control" onchange="document.querySelector('#opt_transition_exit').value = document.querySelector('#opt_transition').value;">
+                        <select name="transition" id="opt_transition" class="form-control" onchange="document.querySelector('#opt_transition_exit').value = document.querySelector('#opt_transition').value;">
                             <option value="tunnel">Túnel</option>
-                            <option value="staircase">Escadas</option>
                         </select>
                     </div>
     
                     <div class="form-group">
                         <label for="clinical">Clínico</label>
-                        <select name="clinical" id="opt_clinical" value="<%= intervencao.clinical.scene%>" class="form-control">
+                        <select name="clinical" id="opt_clinical" class="form-control">
                             <option value="house">Casa</option>
-                            <option value="shoppingmall">Shopping</option>
-                            <option value="park">Parque</option>
                             <option value="office">Escritório</option>
                         </select>
                     </div>
     
                     <div class="form-group">
                         <label for="situation">Roteiro</label>
-                        <select name="situation" id="opt_situation" value="<%= intervencao.clinical.situation%>" class="form-control">
+                        <select name="situation" id="opt_situation" class="form-control">
                             <option value="relative">Visita de parente</option>
-                            <option value="delivery">Entrega de pizza</option>
+                            <option value="deliveryman">Entrega de pizza</option>
                             <option value="cellphone">Ligação de celular</option>
                             <option value="presentation">Apresentação(assistir)</option>
                             <option value="presenter">Apresentação(apresentar)</option>
@@ -213,21 +238,34 @@
     
                     <div class="form-group">
                         <label for="transition_exit">Saída</label>
-                        <select name="transition_exit" id="opt_transition_exit" value="<%= intervencao.transition%>" class="form-control" disabled>
+                        <select name="transition_exit" id="opt_transition_exit" value="" class="form-control" disabled>
                             <option value="tunnel">Túnel</option>
-                            <option value="staircase">Escadas</option>
+                            <!--<option value="staircase">Escadas</option>-->
                         </select>
                     </div>
                     <!--<div class="form-group">
                       <label for="transition_exit">Tempo(em segundos)</label><br/>
                       <input id="time" min="0" type="number" name="time" id="opt_time" value="0"></input>
                     </div>
-                    <br/>-->
+                    <br/>
+                  
+                    <div class="form-group">
+                      <label for="vr_toggle">Dispositivo</label><br/>
+                      <input id="vr_toggle" type="checkbox" data-toggle="toggle" data-on="RIFT" data-off="CELULAR" ontoggle="switchDevice()" data-onstyle="success" data-offstyle="danger">
+                    </div>-->
                     </div>
+                    <br/>
                     &nbsp;&nbsp;&nbsp;&nbsp;
                     &nbsp;&nbsp;&nbsp;&nbsp;
                     &nbsp;&nbsp;&nbsp;&nbsp;
-                    &nbsp;&nbsp;&nbsp;&nbsp;<button onclick="loadSituationForm()">Iniciar</button>
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    <button onclick="loadSituationForm(); enableButtons()" style="font-size: 30px;">Iniciar</button>
             </div>
         </div>
 
@@ -270,8 +308,15 @@
           <a-image id="sky" src="/assets/textures/newsky.jpg"></a-image>
           <a-image id="render-relax" src="/assets/textures/render_relax.png"></a-image>
           <a-image id="render-house" src="/assets/textures/render_house.png"></a-image>
+          <!--
+            <a-image id="render-office" src="/assets/textures/render_office.png"></a-image>
+            <a-image id="render-shoppingmall" src="/assets/textures/render_shoppingmall.png"></a-image>
+          -->
+          
           <a-image id="yes-tex" src="/assets/textures/yes.jpg"></a-image>
           <a-image id="no-tex" src="/assets/textures/no.png"></a-image>
+          <a-image id="building-tex" src="/assets/textures/building.png"></a-image>
+          <a-image id="office-tex" src="/assets/textures/office.jpg"></a-image>
 
           <a-asset-item id="mario" src="/assets/models/characters/doctor_mario/scene.gltf"></a-asset-item>
           <a-asset-item id="deliveryman" src="/assets/models/characters/david/david.glb"></a-asset-item>
@@ -283,6 +328,7 @@
           <a-asset-item id="coworker-4" src="/assets/models/characters/tyler/tyler.glb"></a-asset-item>
 
 
+          <a-asset-item id="shoppingmall" src="/assets/models/scenes/shoppingmall/model.gltf"></a-asset-item>
           <a-asset-item id="tunnel" src="/assets/models/scenes/arc_tunnel/scene.gltf"></a-asset-item>
           <a-asset-item id="staircase" src="/assets/models/scenes/staircase/StairCase_170.gltf"></a-asset-item>
           <a-asset-item id="casa" src="/assets/models/scenes/sweet_3d/casa/casa_final.obj"></a-asset-item>
@@ -291,15 +337,13 @@
           <a-asset-item id="office-mtl" src="/assets/models/scenes/sweet_3d/escritorio/escritorio.mtl"></a-asset-item>
           <a-asset-item id="door" src="/assets/models/scenes/sweet_3d/porta/nova_fechada.obj"></a-asset-item>
           <a-asset-item id="door-mtl" src="/assets/models/scenes/sweet_3d/porta/nova_fechada.mtl"></a-asset-item>
-          <a-asset-item id="arrow" src="/assets/models/interactives/arrow/arrow.obj"></a-asset-item>
-          <a-asset-item id="arrow-mtl" src="/assets/models/interactives/arrow/arrow.mtl"></a-asset-item>
           <a-asset-item id="box" src="/assets/models/interactives/box/scene.gltf"></a-asset-item>
         </a-assets>
   
         <a-entity id="player">
-          <a-entity id="left-hand"if-no-vr-headset="visible: false" laser-controls="hand: left" oculus-touch-controls="hand: left" raycaster="objects: .clickable; far: 5"></a-entity>
-          <a-entity id="right-hand" if-no-vr-headset="visible: false" laser-controls="hand: right" oculus-touch-controls="hand: right" raycaster="objects: .clickable; far: 5"></a-entity>
-              <a-camera  user-height="1.6">
+          <a-entity id="left-hand"if-no-vr-headset="visible: false" laser-controls="hand: left" oculus-touch-controls="hand: left" raycaster="objects: .clickable; "></a-entity>
+          <a-entity id="right-hand" if-no-vr-headset="visible: false" laser-controls="hand: right" oculus-touch-controls="hand: right" raycaster="objects: .clickable;"></a-entity>
+              <a-camera  id="head" user-height="1.6">
                 
                 <a-cursor if-no-vr-headset="visible: false; disabled: true;"
                   scale="0.4 0.4 0.4"

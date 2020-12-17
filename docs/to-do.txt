@@ -1,11 +1,8 @@
 To do: 
     
     Prioridade
-    - Criar rotação dinâmica de porta
-    - Criar situação de escritório(apresentador, plateia)
     - Criar situação 3
-
-    - posicionar npcs, pegadas, e saída
+    - Raycaster do Controle
 
     Problemas do A-Frame
     - Raycaster

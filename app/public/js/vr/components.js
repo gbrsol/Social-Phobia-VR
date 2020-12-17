@@ -140,7 +140,7 @@ AFRAME.registerComponent('door',{
      {
        parent.setAttribute('animation__click',{property:"rotation",dur:"500",to:"0 0 0"});
      }
-     else 
+     else
      {
        parent.setAttribute('animation__click',{property:"rotation",dur:"500",to:{x:0, y:90, z:0}});
      }
@@ -157,6 +157,20 @@ AFRAME.registerComponent('door',{
   }
 });
 
+
+AFRAME.registerComponent("input-listen", {
+  init: function () {
+      //X-button Pressed
+      this.el.addEventListener("xbuttondown", function (e) {
+          this.emit("teleportstart");
+      });
+
+      //X-button Released
+      this.el.addEventListener("xbuttonup", function (e) {
+          this.emit("teleportend");
+      });
+  }
+});
 AFRAME.registerComponent('blink-teleportation', {
 	schema: {
 		pos: {type: 'vec3'},
@@ -277,3 +291,29 @@ AFRAME.registerComponent('goto', {
      })
   }
 });
+
+AFRAME.registerComponent('raycastable2', {
+
+  init: function () {
+    
+    this.el.addEventListener('raycaster-intersected', function (evt) {
+      
+      // ID
+      console.log(evt.detail.intersection.object.el.id);
+      
+      // Class
+      console.log(evt.detail.intersection.object.el.className);
+      
+      // If you haven't bound `this` to the handler, and only need basic attribute data, you should also be able to do the following, but YMMV:
+      
+      console.log(this.id);
+      
+      console.log(this.className);
+      raycastered = true;
+      
+    });
+    this.el.addEventListener('raycaster-intersected-cleared', evt => {
+      raycastered = false;
+    });
+   }
+  });

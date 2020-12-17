@@ -1,0 +1,70 @@
+<html>
+    <head>
+        <title>Help</title>
+
+        <!-- JQuery -->
+		<script src="/js/jquery-2.2.1.js"></script>
+
+		<!-- bootstrap - link cdn -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+		<!-- incluindo css -->
+		<link href="/css/style.css" rel="stylesheet">
+    </head>
+    <body>
+        <div class="container" color:#FFFFFF>
+            <H1 text-align:center>Help</H1>
+        </div>
+        <nav class="navbar navbar-inverse">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                <a class="navbar-brand" href="/">Home</a>
+                </div>
+                <ul class="nav navbar-nav">
+                    <!--<li class="active"><a href="/">Home</a></li>-->
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Gerência
+                        <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="/forms/form_add_psicologo">Psicólogo</a></li>
+                            <li><a href="/forms/form_add_paciente">Paciente</a></li>
+                            <li><a href="/forms/form_add_tipofobia">Tipo de Fobia</a></li>
+                            <li><a href="/forms/form_add_intervencao">Intervenção</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Sessão
+                        <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="/forms/form_add_sessao">Criar Sessão</a></li>
+                            <li><a href="/sessao/configurar_sessao">Executar Sessão</a></li>
+                            <li><a href="/simulation">Simulação</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="/help">Help</a>
+                </div>
+            </div>
+        </nav>
+        
+        <div class="container">
+            <H1>Gerência</H1>
+            <ul>
+                <li>Pacientes: cria um paciente com parâmetros definidos</li>
+                <li>Psicólogos: cria um psicólogo com parâmetros definidos</li>
+                <li>Tipo de Fobia Social: cria um tipo de fobia social com parâmetros definidos</li>
+                <li>Intervenção Clínica: cria uma intervenção com parâmetros definidos</li>
+            </ul>
+            <H1>Sessão</H1>
+            <ul>
+                <li>Criar sessão: cria uma sessão com parâmetros definidos</li>
+                <li>Executar sessão(WIP): executa a sessão selecionada</li>
+                <li>Simulação: abre a simulação. Botão Iniciar Simulação abre o gerenciador de simulação dinâmica</li>
+            </ul>
+
+        </div>
+    </body>
+</html>

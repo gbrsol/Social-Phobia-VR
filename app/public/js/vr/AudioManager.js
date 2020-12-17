@@ -41,8 +41,7 @@ function AudioManager(element, inter)
               Vamos utilizar dos benefícios da respiração diafragmática? Inspire\
               profundamente contando até 4, segure a respiração contando até 4 e expire\
               contando até 5. Vamos começar.\
-              1..2..3..4..5..1..2..3..4..5..1..2..3..4..5"},
-              {"id": "#cellphone_question_2", "transcript": "Agora que estamos mais relaxados, vamos escolher. Você gostaria de\
+              1..2..3..4..5..1..2..3..4..5..1..2..3..4..5. Agora que estamos mais relaxados, vamos escolher. Você gostaria de\
               atender ao telefone?"}
             ]
             }
@@ -83,17 +82,35 @@ function AudioManager(element, inter)
           {
             'situation': 'presentation',
             'audios': {
-              'positive': [],
-              'negative': [],
-              'question': []
+              'positive': [{"id": '#presentation_positive_1', "transcript": "Que bom! Ficarei aqui como seu anjo da guarda, boa sorte!"}],
+              'negative': [{"id": '#presentation_negative_1', "transcript": "Não precisa ficar com medo, o apresentador quer que as pessoas perguntem, quando estiver pronto, pode voltar a qualquer momento!"}],
+              'question': [{"id": '#presentation_question_1', "transcript": "Você está numa apresentação! Faça uma pergunta ao apresentador. Acha que consegue?"}]
             }
           },
           {
             'situation': 'presenter',
             'audios': {
-              'positive': [],
-              'negative': [],
-              'question': []
+              'positive': [{"id": '#presenter_positive_1', "transcript": "Ótimo, boa sorte. Lembre-se de respirar"}],
+              'negative': [{"id": '#presentation_negative_1', "transcript": "Que pena.... lembre-se de respirar e acalmar-se, e volte quando achar que consegue! Boa sorte!"}],
+              'question': [{"id": '#presentation_question_1', "transcript": "Você está numa apresentação! Você consegue fazer isso?"}]
+            }
+          }
+        ],
+        'shoppingmall': [
+          {
+            'situation': 'walk',
+            'audios': {
+              'positive': [{"id": '#presentation_positive_1', "transcript": "Que bom! Ficarei aqui como seu anjo da guarda, boa sorte!"}],
+              'negative': [{"id": '#presentation_negative_1', "transcript": "Não precisa ficar com medo, o apresentador quer que as pessoas perguntem, quando estiver pronto, pode voltar a qualquer momento!"}],
+              'question': [{"id": '#presentation_question_1', "transcript": "Você está numa apresentação! Faça uma pergunta ao apresentador. Acha que consegue?"}]
+            }
+          },
+          {
+            'situation': 'fastfood',
+            'audios': {
+              'positive': [{"id": '#presenter_positive_1', "transcript": "Ótimo, boa sorte. Lembre-se de respirar"}],
+              'negative': [{"id": '#presentation_negative_1', "transcript": "Que pena.... lembre-se de respirar e acalmar-se, e volte quando achar que consegue! Boa sorte!"}],
+              'question': [{"id": '#presentation_question_1', "transcript": "Você está numa apresentação! Você consegue fazer isso?"}]
             }
           }
         ]

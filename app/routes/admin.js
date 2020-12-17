@@ -46,4 +46,7 @@ module.exports = function(app)
     app.get('/sessao/iniciar_intervencao_nova/iniciar_salvar', function(req, res){
         app.app.controllers.admin.iniciar_salvar_nova_intervencao(app, req, res);
     }); 
+    app.get('/help', function(req,res){
+        res.render('help/help')
+    })
 }

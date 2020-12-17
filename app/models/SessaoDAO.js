@@ -37,19 +37,21 @@ SessaoDAO.prototype.validateAllFields = function(paciente, psicologo, tipofobia,
     return false;
 }
 
-SessaoDAO.prototype.getAll = function(res){
+SessaoDAO.prototype.getAll = function(req, res){
     var ret;
     this._connection.open(function(err, mongoclient){
         mongoclient.collection("sessoes", function(err, collection){
             collection.find({}).toArray(function(err, result){
-                //res.render('/forms/form_add_sessao', {paciente:paciente, psicologo: psicologo, tipofobia: tipofobia, intervencao: intervencao})
-                ret = result;
+                //res.render('forms/form_add_sessao', {paciente:paciente, psicologo: psicologo, tipofobia: tipofobia, intervencao: intervencao})
+                //ret = result;
+                console.log(result)
+                res.render('admin/sessao/configurar_sessao',{validacao:{}, campos:{}, sessoes: result})
             });
             mongoclient.close();
         });
     });
     
-    return ret;
+    //return ret;
 }
 
 SessaoDAO.prototype.iniciarSessao = function(sessao, res){

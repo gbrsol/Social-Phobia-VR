@@ -11,6 +11,12 @@ app.use(express.static('./app/public/'));
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(expressValidator());
 
+app.locals.scriptsSimulacao = function()
+{
+    //require('app/public/js/vr/scripts.js')
+    return require('D:/Git Projects/Social-Phobia-VR/app/public/js/vr/scripts.js')
+}
+
 // consign deve vir após o express
 consign()
     .include('app/routes')
@@ -18,5 +24,4 @@ consign()
     .then('app/models')
     .then('app/controllers')
     .into(app);
-
 module.exports = app;

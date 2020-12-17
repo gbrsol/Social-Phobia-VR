@@ -73,3 +73,4 @@ var pressed_key = false;
 var interacted_with_npc = false;
 var audios_transition;
 var footstep_quant = 0;
+var vr_activated = false;

@@ -12,17 +12,18 @@ PacienteDAO.prototype.insertPaciente = function(paciente){
     console.log('Inserido com sucesso!');
 }
 
-PacienteDAO.prototype.get = function(paciente){
+PacienteDAO.prototype.getByID = function(req, res, paciente){
     var ret;
     this._connection.open(function(err, mongoclient){
         mongoclient.collection("pacientes", function(err, collection){
-            collection.find(paciente).toArray(function(err, result){
-                ret = result;
+            collection.find({id:paciente}).toArray(function(err, result){
+                //ret = result;
+                res.send(result)
             });
             mongoclient.close();
         });
     });
-    return ret;
+    //return ret;
 }
 PacienteDAO.prototype.getAll = function(res){
     var ret;

@@ -40,10 +40,13 @@
                         <ul class="dropdown-menu">
                             <li><a href="/forms/form_add_sessao">Criar Sessão</a></li>
                             <li><a href="/sessao/configurar_sessao">Executar Sessão</a></li>
-                            <li><a href="/simulation">Teste</a></li>
+                            <li><a href="/simulation">Simulação</a></li>
                         </ul>
                     </li>
                 </ul>
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="/help">Help</a>
+                </div>
             </div>
         </nav>
 
@@ -76,6 +79,17 @@
                         <div class="form-group">
                             <label for="description">Descrição</label>
                             <input type="text" id="description" name="description" placeholder="Descrição da intervenção" value="<%= campos.descricao%>"class="form-control"/>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="tipo_fobia">Tipo de Fobia Social</label>
+                            <select name="tipo_fobia" value="" id="tipo_fobia" class="form-control">
+                                <% if( tipo_fobia ) { console.log(tipo_fobia);%>
+                                    <%for( var i = 0; i < tipo_fobia.length; i++){%>
+                                        <option value="<%=tipo_fobia%>"><%=tipo_fobia[i].name%></option>
+                                    <%}%>
+                                <%}%>
+                            </select>
                         </div>
                         
                         <div class="form-group">    
