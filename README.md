@@ -2,6 +2,7 @@
  A Social Phobia Treatment System using Virtual Reality with A-Frame, Node.JS and MongoDB.
  
  All characters' 3D models were taken from Mixamo and are stored locally due to Github's 100MB restriction.
+ Most of the scenes were made using SweetHome3D and some of the objects were taken from TurboSquid, Sketchfab and CGTrader.
  
 ## Dependencies
 package.json
