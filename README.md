@@ -31,3 +31,4 @@ package.json
 - Fork this repository;
 - Run 'app' using Node.js command 'node';
 - Go to the following link: [Application start](localhost:3000);
+- Some stuff might not work because of the local 3D models, but have fun.
