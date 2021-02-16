@@ -33,3 +33,6 @@ package.json
 - Run 'app' using Node.js command 'node';
 - Go to the following link: [Application start](localhost:3000);
 - Some stuff might not work because of the local 3D models, but have fun.
+
+## License
+GNU General Public License v3.0
